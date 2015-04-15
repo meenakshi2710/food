@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Food</string>
+    
+<string name="drawer_open">Open</string>
+<string name="drawer_close">Close</string>
+    
+    <string name="forgot_my_pwd">Forgotten your password?</string>
+    <string name="search">Search</string>
+    <string name="signin">Sign In</string>
+    <string name="register">Sign Up</string>
+    <string name="password">Password</string>
+    <string name="name">Name</string>
+    <string name="username">Username</string>
+    <string name="keep_me_signin">Keep me signed in</string>
+    <string name="no_account">No account?</string>
+    <string name="register_now">Register Now</string>
+    <string name="have_account">Have account?</string>
+    <string name="signin_now">Sign In Now</string>
+	<string name="signout">Sign Out</string>
+	<string name="recipes">Recipes</string>
+	<string name="chatter">Chatter</string>
+	<string name="music">Music</string>
+	<string name="select">--Select station--</string>
+	<string name="stop">Stop</string>
+	<string name="bombay_beats">Bombay Beats</string>
+	<string name="bollywood_hungama">Bollywood Hungama</string>
+	<string name="dubai_1016">Dubai 101.6</string>
+	<string name="desi_musicmix">Desi Music Mix</string>
+	<string name="punjabi_usa">Punjabi USA</string>
+	<string name="radiocity_indipop">Radio City IndiPop</string>
+	<string name="bollywood_tashan">Bollywood Tashan</string>
+	<string name="hindi_evergreen">Hindi Evergreen</string>
+	<string name="spice_box">Spice Box</string>
+	<string name="radio_teentaal">Radio Teentaal</string>
+	<string name="food_detail_txt">Most food has its origin in plants. Some food is obtained directly from plants . Maize, wheat, and rice – in all of their varieties – account for 87% of all grain production worldwide.[2] Most of the grain that is produced worldwide is fed to livestock.\n\nSome foods not from animal or plant sources include various edible fungi, especially mushrooms. Fungi and ambient bacteria are used in the preparation of fermented.</string>
+</resources>

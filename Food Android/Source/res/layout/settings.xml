@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/logout"
+        style="@style/btn"
+        android:layout_width="152dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/divider"
+        android:layout_marginTop="@dimen/pad_10dp"
+        android:background="@color/main_color_gray"
+        android:drawableLeft="@drawable/ic_logout"
+        android:drawablePadding="@dimen/pad_10dp"
+        android:layout_centerInParent="true"
+        android:padding="@dimen/pad_10dp"
+        android:text="@string/signout"
+        android:textColor="@color/white"
+        android:textSize="@dimen/txt_16sp" />
+
+</RelativeLayout>
