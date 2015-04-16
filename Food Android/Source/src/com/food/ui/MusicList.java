@@ -46,7 +46,7 @@ import com.food.model.Music;
  * dummy list of Radio stations. You need to write actual implementation for loading
  * and displaying radio stations.
  */
-public class MusicList extends CustomFragment implements OnClickListener, MediaPlayer.OnErrorListener
+public class MusicList extends CustomFragment implements OnClickListener
 {
 
 	private ConnectivityManager connMgr;
@@ -63,27 +63,15 @@ public class MusicList extends CustomFragment implements OnClickListener, MediaP
     ListView list =  null;
     Context context;
     int poss;
-    Music[] oMusic = new Music[12];
     ProgressDialog mediaPlayerLoadingBar;
+    Music[] oMusic;
     
-    public MusicList(Context context, MediaPlayer player) {
+    public MusicList(Context context, MediaPlayer player, Music[] oMusic) {
 		connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		this.player = player;
 		this.context = context;
 		mediaPlayerLoadingBar = new ProgressDialog(this.context);
-		oMusic[0] = new Music(0, "Bombay Beats", "http://123.176.41.8:8056/;?icy=http", "", R.drawable.cat1);
-		oMusic[1] = new Music(1, "Bollywood Hungama", "http://www.live365.com/play/bollywoodhungama", "", R.drawable.cat2);
-		oMusic[2] = new Music(2, "Dubai 101.6", "http://5303.live.streamtheworld.com/ARNCITY_SC", "", R.drawable.cat3);
-		oMusic[3] = new Music(3, "Desi Music Mix", "http://s1.desimusicmix.com:8014/;?icy=http", "", R.drawable.cat4);
-		oMusic[4] = new Music(4, "Punjabi USA", "http://198.178.123.5:7016/;?icy=http", "", R.drawable.cat5);
-		oMusic[5] = new Music(5, "Radio City IndiPop", "http://208.85.2.106:9910/;?icy=http", "", R.drawable.cat6);
-		oMusic[6] = new Music(6, "Bollywood Hits", "http://50.7.77.115:8174/;?icy=http", "", R.drawable.cat1);
-		oMusic[7] = new Music(7, "Bollywood Tashan", "http://viadj.viastreaming.net:7090/;?icy=http", "", R.drawable.cat2);
-		oMusic[8] = new Music(8, "Hindi Evergreen", "http://50.7.77.114:8296/;?icy=http", "", R.drawable.cat3);
-		oMusic[9] = new Music(9, "Spice Box", "http://96.30.15.163:8039/;?icy=http", "", R.drawable.cat4);
-		oMusic[10] = new Music(10, "Radio Teentaal", "http://195.154.176.33:8000/;?icy=http", "", R.drawable.cat5);
-		oMusic[11] = new Music(11, "Bombay Beats", "http://123.176.41.8:8056/;?icy=http", "", R.drawable.cat6);
-		
+		this.oMusic = oMusic;
 	}
     
     @Override
@@ -255,18 +243,18 @@ public class MusicList extends CustomFragment implements OnClickListener, MediaP
 	private void loadMusicList()
 	{
 		ArrayList<Data> pList = new ArrayList<Data>();
-		pList.add(new Data(oMusic[0].getTitle(), "69", oMusic[0].getImage1()));
-		pList.add(new Data(oMusic[1].getTitle(), "87", oMusic[1].getImage1()));
-		pList.add(new Data(oMusic[2].getTitle(), "34", oMusic[2].getImage1()));
-		pList.add(new Data(oMusic[3].getTitle(), "94", oMusic[3].getImage1()));
-		pList.add(new Data(oMusic[4].getTitle(), "42", oMusic[4].getImage1()));
-		pList.add(new Data(oMusic[5].getTitle(), "42", oMusic[5].getImage1()));
-		pList.add(new Data(oMusic[6].getTitle(), "42", oMusic[6].getImage1()));
-		pList.add(new Data(oMusic[7].getTitle(), "42", oMusic[7].getImage1()));
-		pList.add(new Data(oMusic[8].getTitle(), "42", oMusic[8].getImage1()));
-		pList.add(new Data(oMusic[9].getTitle(), "42", oMusic[9].getImage1()));
-		pList.add(new Data(oMusic[10].getTitle(), "42", oMusic[10].getImage1()));
-		pList.add(new Data(oMusic[11].getTitle(), "94", oMusic[11].getImage1()));
+		pList.add(new Data(oMusic[0].getTitle(), "69 listeners", oMusic[0].getImage1()));
+		pList.add(new Data(oMusic[1].getTitle(), "87 listeners", oMusic[1].getImage1()));
+		pList.add(new Data(oMusic[2].getTitle(), "34 listeners", oMusic[2].getImage1()));
+		pList.add(new Data(oMusic[3].getTitle(), "94 listeners", oMusic[3].getImage1()));
+		pList.add(new Data(oMusic[4].getTitle(), "42 listeners", oMusic[4].getImage1()));
+		pList.add(new Data(oMusic[5].getTitle(), "51 listeners", oMusic[5].getImage1()));
+		pList.add(new Data(oMusic[6].getTitle(), "39 listeners", oMusic[6].getImage1()));
+		pList.add(new Data(oMusic[7].getTitle(), "42 listeners", oMusic[7].getImage1()));
+		pList.add(new Data(oMusic[8].getTitle(), "21 listeners", oMusic[8].getImage1()));
+		pList.add(new Data(oMusic[9].getTitle(), "42 listeners", oMusic[9].getImage1()));
+		pList.add(new Data(oMusic[10].getTitle(), "80 listeners", oMusic[10].getImage1()));
+		pList.add(new Data(oMusic[11].getTitle(), "94 listeners", oMusic[11].getImage1()));
 
 		musicList = new ArrayList<Data>(pList);
 		
@@ -353,38 +341,7 @@ public class MusicList extends CustomFragment implements OnClickListener, MediaP
 		} 
 		return super.onOptionsItemSelected(item);
 	}
-	@Override
-    public boolean onError(MediaPlayer mp, int what, int extra) {
-        switch (what){
-                case MediaPlayer.MEDIA_ERROR_UNKNOWN:
-                	System.out.println("unknown media playback error");
-                    break;
-                case MediaPlayer.MEDIA_ERROR_SERVER_DIED:
-                	System.out.println("server connection died");
-                default:
-                	System.out.println("generic audio playback error");
-                    break;
-            }
-
-            switch (extra){
-                case MediaPlayer.MEDIA_ERROR_IO:
-                	System.out.println("IO media error");
-                    break;
-                case MediaPlayer.MEDIA_ERROR_MALFORMED:
-                	System.out.println("media error, malformed");
-                    break;
-                case MediaPlayer.MEDIA_ERROR_UNSUPPORTED:
-                	System.out.println("unsupported media content");
-                    break;
-                case MediaPlayer.MEDIA_ERROR_TIMED_OUT:
-                	System.out.println("media timeout error");
-                    break;
-                default:
-                	System.out.println("unknown playback error");
-                    break;
-            }
-        return true;
-    }
+	
 	public boolean isInternetConnected() {
 	     
 		NetworkInfo networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI); 
@@ -392,7 +349,6 @@ public class MusicList extends CustomFragment implements OnClickListener, MediaP
 		networkInfo = connMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
 		boolean isMobileConn = networkInfo.isConnected();
 		return isWifiConn;
-		//Log.d(DEBUG_TAG, "Mobile connected: " + isMobileConn);
 	}
 	
 	
@@ -418,83 +374,5 @@ public class MusicList extends CustomFragment implements OnClickListener, MediaP
 //        		URL = "http://www.onlineradios.in/#radio-mirchi-98-3-fm";
 //        		break;
  *  
- *  
- *  startPlaying() code without use of threads
- * 	initializeMediaPlayer(pos);
-	buttonStopPlay.setEnabled(true);
-    buttonPlay.setEnabled(false);
-    
-    class MyThread implements Runnable {
-
-    	   public MyThread(int pos) {
-    	       // store parameter for later user
-    	   }
-
-    	   public void run() {
-    	   }
-    	}
-    Runnable r = new MyThread(pos);
-    new Thread(r).start();
      
-    try {
-    	player.prepare();
-		player.start();
-        
-        isPlaying = true;
-        buttonPlay.setText("Playing " + pos);
-        
-	} catch (IllegalStateException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	} catch(Exception e) {// might take long! (for buffering, etc)
-		Toast.makeText(getActivity(),
-				   "Sorry, please try again..",
-				   Toast.LENGTH_LONG).show();
-	}
-	
- */	
-
-/*
-switch(pos){
-	case 0:  // works
-		URL ="http://123.176.41.8:8056/;?icy=http";
-		break;
-	case 1: // Bollywood Hungama - works
-		URL = "http://www.live365.com/play/bollywoodhungama";
-		break;
-	case 2: //  Dubai 101.6 - works
-		URL = "http://5303.live.streamtheworld.com/ARNCITY_SC";
-		break;
-    case 3: // Desi Music mix - works
-    	URL = "http://s1.desimusicmix.com:8014/;?icy=http";
-    	break;
-    case 4: // Punjabi Radio USA - works copy of case 0?
-    	URL = "http://198.178.123.5:7016/;?icy=http";
-    	break;
-    case 5: // Radio City IndiPop - NO
-    	URL = "http://208.85.2.106:9910/;?icy=http";
-    	break;
-    case 6: // Bollywood Hits - works
-    	URL = "http://50.7.77.115:8174/;?icy=http";
-    	break;
-	case 7: // Bollywood Tashan - works
-		URL = "http://viadj.viastreaming.net:7090/;?icy=http";
-		break;
-	case 8: // Hindi Evergreen - works
-		URL = "http://50.7.77.114:8296/;?icy=http";
-		break;
-	case 9: // Spice Box - works
-		URL = "http://96.30.15.163:8039/;?icy=http";
-		break;
-	case 10: // Radio Teentaal - works
-		URL = "http://195.154.176.33:8000/;?icy=http";
-		break;
-		
-	default: // works
-		URL ="http://123.176.41.8:8056/;?icy=http";
-		break;
-}
 */

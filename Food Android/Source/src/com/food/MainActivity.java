@@ -1,11 +1,7 @@
 package com.food;
 
-import java.lang.ref.SoftReference;
-import java.util.ArrayList;
-import java.util.List;
 
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
+import java.util.ArrayList;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
@@ -19,17 +15,15 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.food.custom.CustomActivity;
-import com.food.custom.CustomFragment;
 import com.food.model.Data;
+import com.food.model.Music;
 import com.food.ui.CategoryList;
 import com.food.ui.LeftNavAdapter;
 import com.food.ui.RecipeList;
-import com.food.ui.ChatterList;
 import com.food.ui.MyFriendsList;
 import com.food.ui.MusicList;
 import com.food.ui.Settings;
@@ -46,6 +40,7 @@ public class MainActivity extends CustomActivity
 	public int playing ;
 	private String[] titles = new String[10];
 	private Fragment[] fragments = new Fragment[10];
+	Music[] oMusic = new Music[12];
 	
 	//private List<Fragment> fragments = new ArrayList<Fragment>();  
 	//private List<String> titles  = new ArrayList<String>(); 
@@ -76,9 +71,25 @@ public class MainActivity extends CustomActivity
 
 		setupContainer();
 		setupDrawer();
+		setupMusicList();
 	
 	}
 
+	private void setupMusicList() {
+		oMusic[0] = new Music(0, "Bombay Beats", "http://123.176.41.8:8056/;?icy=http", "", R.drawable.cat1);
+		oMusic[1] = new Music(1, "Bollywood Hungama", "http://www.live365.com/play/bollywoodhungama", "", R.drawable.cat2);
+		oMusic[2] = new Music(2, "Dubai 101.6", "http://5303.live.streamtheworld.com/ARNCITY_SC", "", R.drawable.cat3);
+		oMusic[3] = new Music(3, "Desi Music Mix", "http://s1.desimusicmix.com:8014/;?icy=http", "", R.drawable.cat4);
+		oMusic[4] = new Music(4, "Punjabi USA", "http://198.178.123.5:7016/;?icy=http", "", R.drawable.cat5);
+		oMusic[5] = new Music(5, "Radio City IndiPop", "http://208.85.2.106:9910/;?icy=http", "", R.drawable.cat6);
+		oMusic[6] = new Music(6, "Bollywood Hits", "http://50.7.77.115:8174/;?icy=http", "", R.drawable.cat1);
+		oMusic[7] = new Music(7, "Bollywood Tashan", "http://viadj.viastreaming.net:7090/;?icy=http", "", R.drawable.cat2);
+		oMusic[8] = new Music(8, "Hindi Evergreen", "http://50.7.77.114:8296/;?icy=http", "", R.drawable.cat3);
+		oMusic[9] = new Music(9, "Spice Box", "http://96.30.15.163:8039/;?icy=http", "", R.drawable.cat4);
+		oMusic[10] = new Music(10, "Radio Teentaal", "http://195.154.176.33:8000/;?icy=http", "", R.drawable.cat5);
+		oMusic[11] = new Music(11, "Bombay Beats", "http://123.176.41.8:8056/;?icy=http", "", R.drawable.cat6);
+		
+	}
 	/**
 	 * Setup the drawer layout. This method also includes the method calls for
 	 * setting up the Left side drawer.
@@ -271,7 +282,7 @@ public class MainActivity extends CustomActivity
 		   case 8:
 				 return new Settings();
 		   case 9:
-				 return new MusicList(this, player);
+				 return new MusicList(this, player, oMusic);
 		   default: 
 			    return new RecipeList();
 		}	
