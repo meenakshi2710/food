@@ -38,7 +38,7 @@ public class RecipeDetail extends CustomFragment
     private String dishId;
     TextView rDishName, rUserName, rDescription;
     Button rDesc, rProc, rIngr; 
-    LinearLayout recipe_desc, recipe_proc, recipe_ingr;
+    LinearLayout recipe_desc;
     ImageView image1, image2, image3, image4, image5, image6;
     String img_src1 = null, img_src2 = null, img_src3 = null, img_src4 = null, img_src5 = null, img_src6 = null; 
     JSONObject dish = new JSONObject();
@@ -54,7 +54,6 @@ public class RecipeDetail extends CustomFragment
 			Bundle savedInstanceState)
 	{
 		View v = inflater.inflate(R.layout.recipe_detail, null);
-		//setTouchNClick(v.findViewById(R.id.btn));
 		
 		initializeUIElements(v);
 		loadDescription();
@@ -62,14 +61,12 @@ public class RecipeDetail extends CustomFragment
 	}
 
 	private void initializeUIElements(View v) {
-
+		
 		rDishName = (TextView) v.findViewById(R.id.dishName);
 		rUserName = (TextView) v.findViewById(R.id.userName);
 		rDescription = (TextView) v.findViewById(R.id.description);
 		
 		recipe_desc = (LinearLayout) v.findViewById(R.id.layout_desc);
-		//recipe_proc = (LinearLayout) v.findViewById(R.id.layout_desc);
-		//recipe_ingr = (LinearLayout) v.findViewById(R.id.layout_desc);
 		
 		rDesc = (Button) v.findViewById(R.id.desc);
 		rDesc.setOnClickListener(this);
@@ -92,7 +89,7 @@ public class RecipeDetail extends CustomFragment
 	}
 	
 	public void onClick(View v) {
-		if (v == rDesc) {
+	   if (v == rDesc) {
 			rDesc.setEnabled(false);
 			rDesc.setTextColor(getResources().getColor(R.color.gray_light));
 			rProc.setEnabled(true);

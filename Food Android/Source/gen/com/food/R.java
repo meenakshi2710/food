@@ -171,23 +171,24 @@ public final class R {
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int cat_item=0x7f030001;
-        public static final int friend_item=0x7f030002;
-        public static final int friends_list=0x7f030003;
-        public static final int left_nav_item=0x7f030004;
-        public static final int login=0x7f030005;
-        public static final int music_item=0x7f030006;
-        public static final int music_list=0x7f030007;
-        public static final int my_profile=0x7f030008;
-        public static final int recipe_description=0x7f030009;
-        public static final int recipe_detail=0x7f03000a;
-        public static final int recipe_image_item=0x7f03000b;
-        public static final int recipe_image_list=0x7f03000c;
-        public static final int recipe_item=0x7f03000d;
-        public static final int recipe_list=0x7f03000e;
-        public static final int register=0x7f03000f;
-        public static final int search=0x7f030010;
-        public static final int settings=0x7f030011;
-        public static final int splash=0x7f030012;
+        public static final int detail_main=0x7f030002;
+        public static final int friend_item=0x7f030003;
+        public static final int friends_list=0x7f030004;
+        public static final int left_nav_item=0x7f030005;
+        public static final int login=0x7f030006;
+        public static final int music_item=0x7f030007;
+        public static final int music_list=0x7f030008;
+        public static final int my_profile=0x7f030009;
+        public static final int recipe_description=0x7f03000a;
+        public static final int recipe_detail=0x7f03000b;
+        public static final int recipe_image_item=0x7f03000c;
+        public static final int recipe_image_list=0x7f03000d;
+        public static final int recipe_item=0x7f03000e;
+        public static final int recipe_list=0x7f03000f;
+        public static final int register=0x7f030010;
+        public static final int search=0x7f030011;
+        public static final int settings=0x7f030012;
+        public static final int splash=0x7f030013;
     }
     public static final class menu {
         public static final int compose=0x7f080000;

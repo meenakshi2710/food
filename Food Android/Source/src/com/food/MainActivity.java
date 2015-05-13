@@ -188,7 +188,7 @@ public class MainActivity extends CustomActivity
 	 * @param pos
 	 *            the position of tab selected.
 	 */
-	private void launchFragment(int pos)
+	public void launchFragment(int pos)
 	{
 		Fragment f = null;
 		String title = null;
@@ -310,7 +310,7 @@ public class MainActivity extends CustomActivity
 		findViewById(R.id.recipes).setEnabled(true);
 	}
 	
-	private void setCurrTab(int res){
+	public void setCurrTab(int res){
 		enableAllTabs();
 		findViewById(res).setEnabled(false);
 	}
@@ -397,10 +397,6 @@ public class MainActivity extends CustomActivity
 		super.onClick(v);
 
 		switch (v.getId()) {
-		   //case R.id.logout:
-		   //  startActivity(new Intent(this, Login.class));
-		  //	 finish();
-		  //	 break;
 		   case R.id.chatter:
 		     launchFragment(0);
 		     setCurrTab(R.id.chatter); 

@@ -2,6 +2,7 @@ package com.food;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.food.custom.CustomActivity;
 import com.food.ui.RecipeDetail;
@@ -22,7 +23,7 @@ public class DetailActivity extends CustomActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.detail_main);
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setTitle("Recipes");
@@ -64,6 +65,4 @@ public class DetailActivity extends CustomActivity
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	
 }
