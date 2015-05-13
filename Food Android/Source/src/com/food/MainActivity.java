@@ -2,7 +2,7 @@ package com.food;
 
 
 import java.util.ArrayList;
-import android.content.Intent;
+
 import android.content.res.Configuration;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -22,10 +23,12 @@ import com.food.custom.CustomActivity;
 import com.food.model.Data;
 import com.food.model.Music;
 import com.food.ui.CategoryList;
+import com.food.ui.ChatterList;
 import com.food.ui.LeftNavAdapter;
-import com.food.ui.RecipeList;
-import com.food.ui.MyFriendsList;
 import com.food.ui.MusicList;
+import com.food.ui.MyFriendsList;
+import com.food.ui.MyProfile;
+import com.food.ui.RecipeList;
 import com.food.ui.Settings;
 
 /**
@@ -35,18 +38,14 @@ import com.food.ui.Settings;
  */
 public class MainActivity extends CustomActivity
 {
-
+    public String username;
 	public MediaPlayer player = new MediaPlayer();
 	public int playing ;
 	private String[] titles = new String[10];
 	private Fragment[] fragments = new Fragment[10];
 	Music[] oMusic = new Music[12];
 	
-	//private List<Fragment> fragments = new ArrayList<Fragment>();  
-	//private List<String> titles  = new ArrayList<String>(); 
-
-	
-	/** The drawer layout. */
+		/** The drawer layout. */
 	private DrawerLayout drawerLayout;
 
 	/** ListView for left side drawer. */
@@ -67,29 +66,36 @@ public class MainActivity extends CustomActivity
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+	    setContentView(R.layout.activity_main);
 
 		setupContainer();
 		setupDrawer();
 		setupMusicList();
-	
-	}
-
-	private void setupMusicList() {
-		oMusic[0] = new Music(0, "Bombay Beats", "http://123.176.41.8:8056/;?icy=http", "", R.drawable.cat1);
-		oMusic[1] = new Music(1, "Bollywood Hungama", "http://www.live365.com/play/bollywoodhungama", "", R.drawable.cat2);
-		oMusic[2] = new Music(2, "Dubai 101.6", "http://5303.live.streamtheworld.com/ARNCITY_SC", "", R.drawable.cat3);
-		oMusic[3] = new Music(3, "Desi Music Mix", "http://s1.desimusicmix.com:8014/;?icy=http", "", R.drawable.cat4);
-		oMusic[4] = new Music(4, "Punjabi USA", "http://198.178.123.5:7016/;?icy=http", "", R.drawable.cat5);
-		oMusic[5] = new Music(5, "Radio City IndiPop", "http://208.85.2.106:9910/;?icy=http", "", R.drawable.cat6);
-		oMusic[6] = new Music(6, "Bollywood Hits", "http://50.7.77.115:8174/;?icy=http", "", R.drawable.cat1);
-		oMusic[7] = new Music(7, "Bollywood Tashan", "http://viadj.viastreaming.net:7090/;?icy=http", "", R.drawable.cat2);
-		oMusic[8] = new Music(8, "Hindi Evergreen", "http://50.7.77.114:8296/;?icy=http", "", R.drawable.cat3);
-		oMusic[9] = new Music(9, "Spice Box", "http://96.30.15.163:8039/;?icy=http", "", R.drawable.cat4);
-		oMusic[10] = new Music(10, "Radio Teentaal", "http://195.154.176.33:8000/;?icy=http", "", R.drawable.cat5);
-		oMusic[11] = new Music(11, "Bombay Beats", "http://123.176.41.8:8056/;?icy=http", "", R.drawable.cat6);
+		
+		username = getIntent().getStringExtra("USERNAME");
 		
 	}
+	
+	/*
+	@Override
+	protected void onDestroy() {
+	  // Unregister since the activity is not visible
+	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+	  System.out.println("kill main activity called");
+	  super.onDestroy();
+	}
+	
+	// handler for received Intents for logout event 
+	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+	  @Override
+	  public void onReceive(Context context, Intent intent) {
+		  System.out.println("kill main activity called");
+		  MainActivity.this.finish();
+		  finish();
+	  }
+	};
+	*/
+	
 	/**
 	 * Setup the drawer layout. This method also includes the method calls for
 	 * setting up the Left side drawer.
@@ -215,13 +221,6 @@ public class MainActivity extends CustomActivity
 	    
 	}
 	
-	public void setPlaying(int station){
-		playing = station;
-	}
-	public int getPlaying(){
-		return playing;
-	}
-	
 	private String setTitleFragment(int pos) {
 		switch(pos) {
 		   case 0:
@@ -264,7 +263,7 @@ public class MainActivity extends CustomActivity
 		
 		switch(pos){
 		   case 0:
-			     return new RecipeList();
+			     return new ChatterList();
 		   case 1:
 				 return new RecipeList();
 		   case 2:
@@ -272,7 +271,7 @@ public class MainActivity extends CustomActivity
 		   case 3:
 				 return new CategoryList();
 		   case 4:
-				 return new MyFriendsList();
+				 return new MyProfile(username);
 		   case 5:
 				 return new RecipeList();
 		   case 6:
@@ -280,7 +279,7 @@ public class MainActivity extends CustomActivity
 		   case 7:
 				 return new RecipeList();
 		   case 8:
-				 return new Settings();
+				 return new Settings(this, player);
 		   case 9:
 				 return new MusicList(this, player, oMusic);
 		   default: 
@@ -306,7 +305,6 @@ public class MainActivity extends CustomActivity
 					}
 				});
 		launchFragment(2);
-		setCurrTab(R.id.recipes);
 	}
 	private void enableAllTabs(){
 		findViewById(R.id.music).setEnabled(true);
@@ -401,15 +399,16 @@ public class MainActivity extends CustomActivity
 		super.onClick(v);
 
 		switch (v.getId()) {
-		   case R.id.logout:
-		     startActivity(new Intent(this, Login.class));
-			 finish();
-			 break;
+		   //case R.id.logout:
+		   //  startActivity(new Intent(this, Login.class));
+		  //	 finish();
+		  //	 break;
 		   case R.id.chatter:
 		     launchFragment(0);
 		     setCurrTab(R.id.chatter); 
 		     break;
 		   case R.id.recipes:
+			 System.out.println("tapped on recipes from tab");  
 			 launchFragment(2);
 			 setCurrTab(R.id.recipes); 
 			 break;
@@ -421,4 +420,23 @@ public class MainActivity extends CustomActivity
 	   		enableAllTabs();
 		}
 	}
+        
+     private void setupMusicList() {
+    	
+ 		oMusic[0] = new Music(0, "Trystin Playlist", "", "", R.drawable.cat1);
+ 		oMusic[1] = new Music(1, "Bollywood Hungama", "http://www.live365.com/play/bollywoodhungama", "", R.drawable.cat2);
+ 		oMusic[2] = new Music(2, "Dubai 101.6", "http://5303.live.streamtheworld.com/ARNCITY_SC", "", R.drawable.cat3);
+ 		oMusic[3] = new Music(3, "Desi Music Mix", "http://s1.desimusicmix.com:8014/;?icy=http", "", R.drawable.cat4);
+ 		oMusic[4] = new Music(4, "Bombay Beats", "http://123.176.41.8:8056/;?icy=http", "", R.drawable.cat6);
+ 		oMusic[5] = new Music(5, "Radio City IndiPop", "http://208.85.2.106:9910/;?icy=http", "", R.drawable.cat6);
+ 		oMusic[6] = new Music(6, "Punjabi USA", "http://198.178.123.5:7016/;?icy=http", "", R.drawable.cat5);
+ 		oMusic[7] = new Music(7, "Bollywood Hits", "http://50.7.77.115:8174/;?icy=http", "", R.drawable.cat1);
+ 		oMusic[8] = new Music(8, "Bollywood Tashan", "http://viadj.viastreaming.net:7090/;?icy=http", "", R.drawable.cat2);
+ 		oMusic[9] = new Music(9, "Hindi Evergreen", "http://50.7.77.114:8296/;?icy=http", "", R.drawable.cat3);
+ 		oMusic[10] = new Music(10, "Spice Box", "http://96.30.15.163:8039/;?icy=http", "", R.drawable.cat4);
+ 		oMusic[11] = new Music(11, "Radio Teentaal", "http://195.154.176.33:8000/;?icy=http", "", R.drawable.cat5);
+ 		
+ 	}
+     
+     
 }

@@ -90,7 +90,7 @@ public class LeftNavAdapter extends BaseAdapter
 			convertView = LayoutInflater.from(context).inflate(
 					R.layout.left_nav_item, null);
 		TextView lbl = (TextView) convertView;
-		lbl.setText(getItem(position).getTitle1());
+		lbl.setText(getItem(position).getName());
 
 		if (position == selected)
 		{

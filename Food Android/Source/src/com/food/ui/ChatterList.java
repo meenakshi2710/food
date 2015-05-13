@@ -1,23 +1,61 @@
 package com.food.ui;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.BaseAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.food.DetailActivity;
 import com.food.R;
+import com.food.Search;
 import com.food.custom.CustomFragment;
+import com.food.model.Data;
+import com.food.utils.JSONParser;
 
 /**
- * The Class RecipeDetail is the Fragment class that is launched when the user
- * select a recipe from Recipe List and it simply shows dummy recipe detail text
- * and images. You can customize this to display actual images and text.
+ * The Class RecipeList is the Fragment class that is launched when the user
+ * clicks on Recipe option in Left navigation drawer or when user select a
+ * Category from Category list. It simply display a dummy list of Recipes. You
+ * need to write actual implementation for loading and displaying Recipes.
  */
 public class ChatterList extends CustomFragment
 {
 
+	/** The Activity list. */
+	private ArrayList<Data> recipeList;
+
+	private ArrayList<Data> newList;
+	private View v;
+    
+	
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 */
@@ -25,11 +63,138 @@ public class ChatterList extends CustomFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
-		View v = inflater.inflate(R.layout.recipe_detail, null);
+		v = inflater.inflate(R.layout.recipe_list, null);
 
-		setHasOptionsMenu(true);
-		setTouchNClick(v.findViewById(R.id.btn));
+		loadRecipeList();
+		
 		return v;
+	}
+
+	/**
+	 * This method currently loads a dummy list of Recipes. You can write the
+	 * actual implementation of loading Recipes.
+	 */
+	private void loadRecipeList()
+	{
+			
+		new AsyncTask<String, String, ArrayList<Data>>(){
+			
+		    ProgressDialog loadingBar;
+			 
+			 @Override
+            protected void onPreExecute(){
+            	loadingBar = ProgressDialog.show(getActivity(), "", "Loading Posts...", true);
+            	recipeList = new ArrayList<Data>();
+			}
+			 
+			 @Override
+			    protected ArrayList<Data> doInBackground(String... args) {
+			        
+			        JSONParser jParser = new JSONParser();
+			        
+			        // Getting JSON from URL
+			        JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getPosts.php");
+			          try {
+			        	  JSONArray  dishes = json.getJSONArray("posts");
+			        	    // looping through All Recipes
+			                for (int i = 0; i < dishes.length(); i++) {
+			                    JSONObject c = dishes.getJSONObject(i);
+
+			                    String postId = c.getString("postId");
+			                    String postName = c.getString("postName");
+			                    String userName = c.getString("userName");
+			                    
+			                    recipeList.add(new Data(postId, postName, "by " + userName, R.drawable.img1));
+			                    
+			                 }
+			            } catch (JSONException e) {
+			                e.printStackTrace();
+			            }
+			        
+			        return newList;
+			    }
+			 
+			 @Override
+		        protected void onPostExecute(ArrayList<Data> listt) {
+				   loadingBar.dismiss();
+				   ListView list = (ListView) v.findViewById(R.id.list);
+				   list.setAdapter(new ChatterAdapter());
+					list.setOnItemClickListener(new OnItemClickListener() {
+
+						@Override
+						public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
+								long arg3)
+						{
+							startActivity(new Intent(getActivity(), DetailActivity.class)
+									.putExtra("detail", true));
+						}
+					});
+
+					setHasOptionsMenu(true);
+		        }
+			 
+		}.execute();
+		
+	}
+	
+
+	/**
+	 * The Class RecipeAdapter is the adapter class for Recipes ListView. The
+	 * currently implementation of this adapter simply display static dummy
+	 * contents. You need to write the code for displaying actual contents.
+	 */
+	private class ChatterAdapter extends BaseAdapter
+	{
+
+		/* (non-Javadoc)
+		 * @see android.widget.Adapter#getCount()
+		 */
+		@Override
+		public int getCount()
+		{
+			return recipeList.size();
+		}
+
+		/* (non-Javadoc)
+		 * @see android.widget.Adapter#getItem(int)
+		 */
+		@Override
+		public Data getItem(int arg0)
+		{
+			return recipeList.get(arg0);
+		}
+
+		/* (non-Javadoc)
+		 * @see android.widget.Adapter#getItemId(int)
+		 */
+		@Override
+		public long getItemId(int arg0)
+		{
+			return arg0;
+		}
+
+		/* (non-Javadoc)
+		 * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
+		 */
+		@Override
+		public View getView(int pos, View v, ViewGroup arg2)
+		{
+			if (v == null)
+				v = LayoutInflater.from(getActivity()).inflate(
+						R.layout.recipe_item, null);
+
+			Data c = getItem(pos);
+			TextView lbl = (TextView) v.findViewById(R.id.recipe_name);
+			lbl.setText(c.getName());
+
+			lbl = (TextView) v.findViewById(R.id.user_name);
+			lbl.setText(c.getDesc());
+
+			ImageView img = (ImageView) v.findViewById(R.id.img1);
+			img.setImageResource(c.getImage1());
+			return v;
+		}
+
 	}
 
 	/* (non-Javadoc)
@@ -38,7 +203,20 @@ public class ChatterList extends CustomFragment
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 	{
-		inflater.inflate(R.menu.compose, menu);
+		inflater.inflate(R.menu.search, menu);
 		super.onCreateOptionsMenu(menu, inflater);
+	}
+
+	/* (non-Javadoc)
+	 * @see android.support.v4.app.Fragment#onOptionsItemSelected(android.view.MenuItem)
+	 */
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item)
+	{
+		if (item.getItemId() == R.id.menu_search)
+		{
+			startActivity(new Intent(getActivity(), Search.class));
+		}
+		return super.onOptionsItemSelected(item);
 	}
 }

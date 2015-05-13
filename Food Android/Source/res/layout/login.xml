@@ -96,7 +96,8 @@
                     android:layout_weight="1"
                     android:text="@string/keep_me_signin"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/txt_14sp" />
+                    android:textSize="@dimen/txt_14sp"
+                    android:visibility="invisible" />
 
                 <Button
                     android:id="@+id/btnLogin"
@@ -115,7 +116,8 @@
                 android:padding="@dimen/pad_5dp"
                 android:text="@string/forgot_my_pwd"
                 android:textColor="@color/main_color_gray_dk"
-                android:textSize="@dimen/txt_14sp" />
+                android:textSize="@dimen/txt_14sp"
+                android:visibility="invisible" />
         </LinearLayout>
     </ScrollView>
 

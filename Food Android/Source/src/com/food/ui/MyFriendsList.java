@@ -128,10 +128,10 @@ public class MyFriendsList extends CustomFragment
 						R.layout.recipe_item, null);
 
 			Data c = getItem(pos);
-			TextView lbl = (TextView) v.findViewById(R.id.lbl1);
-			lbl.setText(c.getTitle1());
+			TextView lbl = (TextView) v.findViewById(R.id.recipe_name);
+			lbl.setText(c.getName());
 
-			lbl = (TextView) v.findViewById(R.id.lbl2);
+			lbl = (TextView) v.findViewById(R.id.user_name);
 			lbl.setText(c.getDesc());
 
 			ImageView img = (ImageView) v.findViewById(R.id.img1);

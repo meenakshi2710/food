@@ -27,6 +27,8 @@ public class DetailActivity extends CustomActivity
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setTitle("Recipes");
 
+		System.out.println("In Detail Activity");
+		
 		addFragment();
 	}
 
@@ -38,8 +40,9 @@ public class DetailActivity extends CustomActivity
 	{
 		if (getIntent().hasExtra("detail"))
 		{
+			String dishId = getIntent().getStringExtra("dishId");
 			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.content_frame, new RecipeDetail()).commit();
+					.replace(R.id.content_frame, new RecipeDetail(dishId)).commit();
 		}
 		else
 		{
@@ -61,4 +64,6 @@ public class DetailActivity extends CustomActivity
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	
 }

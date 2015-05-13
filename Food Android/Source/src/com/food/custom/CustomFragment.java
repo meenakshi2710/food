@@ -36,4 +36,9 @@ public class CustomFragment extends Fragment implements OnClickListener
 
 	}
 
+	public void onValueChange() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

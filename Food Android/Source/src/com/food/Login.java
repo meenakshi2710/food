@@ -1,27 +1,31 @@
 package com.food;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URI;
-import java.util.ArrayList;
-import java.util.List;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLEncoder;
 
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 
+import android.app.AlertDialog;
+import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.food.custom.CustomActivity;
+import com.food.utils.AppAlerts;
 /**
  * The Class Login is an Activity class that shows the login screen to users.
  * The current implementation simply start the MainActivity. You can write your
@@ -29,11 +33,12 @@ import com.food.custom.CustomActivity;
  */
 public class Login extends CustomActivity
 {
-	private static final String LOGIN_URL = "http://10.0.2.2:1234/webservice/login.php";
 	private EditText usernameField,passwordField;
-	private TextView status,role,method;
 	private Button mSubmit;
-	
+	ProgressDialog loadingBar;
+	String username, password;
+	private int byGetOrPost = 0; 
+	private int status = 0;
 	 /* (non-Javadoc)
 	 * @see com.chatt.custom.CustomActivity#onCreate(android.os.Bundle)
 	 */
@@ -51,6 +56,8 @@ public class Login extends CustomActivity
 		setTouchNClick(R.id.btnFb);
 		setTouchNClick(R.id.btnTw);
 		setTouchNClick(R.id.btnReg);
+		
+		
 	}
 
 	/* (non-Javadoc)
@@ -62,77 +69,136 @@ public class Login extends CustomActivity
 		super.onClick(v);
 		switch (v.getId()) {
 		   case R.id.btnLogin:
-			   String username = usernameField.getText().toString();
-			   String password = passwordField.getText().toString();
-			   System.out.println("result: " + new SignInActivity(this, 1).execute(username,password));
-			   startActivity(new Intent(this, MainActivity.class));
-				 Toast.makeText(getApplicationContext(), "Welcome", Toast.LENGTH_LONG).show();
-			 
-			   finish();	 
-			   //new AttemptLogin().execute();
+			   username = usernameField.getText().toString();
+			   password = passwordField.getText().toString();
+			   // Check for empty data in the form
+               if (username.trim().length() > 0 && password.trim().length() > 0) {
+            	   //status = new SignInActivity(this, 1).checkLogin();
+            	   checkLogin();
+            	   switch(status)  {
+            	   
+	            	   case 1: 
+	            		   // login user
+	            		   Intent intent = new Intent(this, MainActivity.class);
+	            		   intent.putExtra("USERNAME", username.trim());
+	            		   startActivity(intent);
+	            		   finish();
+	                       Toast.makeText(getApplicationContext(), "Welcome to Trystin", Toast.LENGTH_LONG).show();
+	                       break;
+	            	   case 2:
+	            		   // username/password incorrect
+	            		   new AppAlerts().showErrorDialog(this, "Login Error..", "Please enter username/password correctly." );
+	            		   break;
+            	   }
+            	} else {
+            		new AppAlerts().showErrorDialog(this, "Login Error..", "Username/Password cannot be empty!" );
+         		}
 		       break;
 		   case R.id.btnReg:
 			  startActivity(new Intent(this, Register.class));
 			  finish();
 	          break;
+		   case R.id.btnFb:
+			   new AppAlerts().showErrorDialog(this, "Login Error..", "This feautre is not available yet!" );
+        	   break;
 		   default:
 			  startActivity(new Intent(this, MainActivity.class));
 			  finish();
 			  break;
 		 }
 	}
-	class AttemptLogin extends AsyncTask<String, String, String> {
-
-		 /**
-        * Before starting background thread Show Progress Dialog
-        * */
-		boolean failure = false;
+	
+	private void checkLogin() {
 		
-       @Override
-       protected void onPreExecute() {
-       }
-		
-		@Override
-		protected String doInBackground(String... args) {
-			// TODO Auto-generated method stub
-			 // Check for success tag
-           int success;
-           String username = usernameField.getText().toString();
-           String password = passwordField.getText().toString();
-           try {
-               // Building Parameters
-               List<NameValuePair> params = new ArrayList<NameValuePair>();
-               params.add(new BasicNameValuePair("username", username));
-               params.add(new BasicNameValuePair("password", password));
+		AsyncTask<String, Void, String> task = new AsyncTask<String, Void, String>(){
 
-               Log.d("request!", "starting");
-               // getting product details by making HTTP request
-               HttpClient client = new DefaultHttpClient();
-               HttpGet request = new HttpGet();
-               request.setURI(new URI(LOGIN_URL));
-               HttpResponse response = client.execute(request);
-               Log.d("Login attempt", response.toString());
+            @Override
+            protected void onPreExecute(){
+            	loadingBar = ProgressDialog.show(Login.this, "", "Connecting, Please wait...", true);
+            }
 
-               // if  success
-                Intent i = new Intent(Login.this, MainActivity.class);
-               	finish();
-   				startActivity(i);
-               	
-           } catch (Exception e) {
-               e.printStackTrace();
-           }
+            @Override
+            protected String doInBackground(String... args) {
+            	if(byGetOrPost == 1){ //means by Get Method
+                    try{
+                       String link = "http://indiainme.com/iosLogin.php?username="+username+"&password="+password;URL url = new URL(link);
+                       HttpClient client = new DefaultHttpClient();
+                       HttpGet request = new HttpGet();
+                       request.setURI(new URI(link));
+                       HttpResponse response = client.execute(request);
+                       BufferedReader in = new BufferedReader
+                      (new InputStreamReader(response.getEntity().getContent()));
 
-           return null;
-			
-		}
-		/**
-        * After completing background task Dismiss the progress dialog
-        * **/
-       protected void onPostExecute(String file_url) {
-       }
-		
+                      StringBuffer sb = new StringBuffer("");
+                      String line="";
+                      while ((line = in.readLine()) != null) {
+                         sb.append(line);
+                         break;
+                       }
+                       in.close();
+                       
+                       return sb.toString();
+                 }catch(Exception e){
+                    return new String("Exception: " + e.getMessage());
+                 }
+                 }
+                 else{
+                    try{
+                       String link="http://indiainme.com/iosLogin.php";
+                       String data  = URLEncoder.encode("username", "UTF-8") 
+                       + "=" + URLEncoder.encode(username, "UTF-8");
+                       data += "&" + URLEncoder.encode("password", "UTF-8") 
+                       + "=" + URLEncoder.encode(password, "UTF-8");
+                       URL url = new URL(link);
+                       URLConnection conn = url.openConnection(); 
+                       conn.setDoOutput(true); 
+                       OutputStreamWriter wr = new OutputStreamWriter
+                       (conn.getOutputStream()); 
+                       wr.write( data ); 
+                       wr.flush(); 
+                       BufferedReader reader = new BufferedReader
+                       (new InputStreamReader(conn.getInputStream()));
+                       StringBuilder sb = new StringBuilder();
+                       String line = null;
+                       // Read Server Response
+                       while((line = reader.readLine()) != null)
+                       {
+                    	  System.out.println("line : " + line);
+                    	  sb.append(line);
+                          break;
+                       }
+                       String result = sb.toString();
+                       if(result.contains("{\"success\":1}")){
+                   		status = 1;
+                   	   } else if(result.contains("Invalid Username/Password")){
+                   	    status = 2;
+                   	   }	
+                       return result;
+                       
+                    }catch(Exception e){
+                       return new String("Exception: " + e.getMessage());
+                    }
+                 }
+              }
+
+            @Override
+            protected void onPostExecute(String result){
+            	loadingBar.dismiss();
+            }
+            
+
+        };
+        task.execute();
+        
+        while(status == 0) {
+        	try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+	 		
+	 	}
 	}
-		 
-
+    
 }
 

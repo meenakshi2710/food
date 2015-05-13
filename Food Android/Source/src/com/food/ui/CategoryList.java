@@ -128,7 +128,7 @@ public class CategoryList extends CustomFragment
 
 			Data c = getItem(pos);
 			TextView lbl = (TextView) v.findViewById(R.id.lbl1);
-			lbl.setText(c.getTitle1());
+			lbl.setText(c.getName());
 
 			lbl = (TextView) v.findViewById(R.id.lbl2);
 			lbl.setText(c.getDesc());

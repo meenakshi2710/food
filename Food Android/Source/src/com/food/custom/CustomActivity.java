@@ -16,7 +16,7 @@ import com.food.utils.TouchEffect;
  */
 public class CustomActivity extends FragmentActivity implements OnClickListener
 {
-
+    
 	/**
 	 * Apply this Constant as touch listener for views to provide alpha touch
 	 * effect. The view must have a Non-Transparent background.

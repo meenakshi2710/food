@@ -62,7 +62,7 @@
 
             
             <EditText
-                android:id="@+id/editText0"
+                android:id="@+id/name"
                 style="@style/editext_normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -73,7 +73,17 @@
             </EditText>   
             
             <EditText
-                android:id="@+id/editText1"
+                android:id="@+id/email"
+                style="@style/editext_normal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableRight="@drawable/ic_username"
+                android:hint="@string/email" >
+
+             </EditText>   
+            
+            <EditText
+                android:id="@+id/username"
                 style="@style/editext_normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -82,7 +92,7 @@
             </EditText>
 
             <EditText
-                android:id="@+id/editText2"
+                android:id="@+id/password"
                 style="@style/editext_normal"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -106,21 +116,24 @@
                     android:layout_weight="1"
                     android:text="@string/keep_me_signin"
                     android:textColor="@color/white"
-                    android:textSize="@dimen/txt_14sp" />
+                    android:textSize="@dimen/txt_14sp"
+                    android:visibility="invisible" />
 
                 <Button
                     android:id="@+id/btnSignUp"
                     style="@style/btn"
+                    android:textColor="@color/white"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/btn_login" />
+                    android:text="@string/register"
+                    android:background="@drawable/btn_register" />
             </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
 
     <LinearLayout
-        android:id="@+id/btnReg"
+        android:id="@+id/btnSignIn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/reg_bg"

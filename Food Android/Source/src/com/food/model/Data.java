@@ -8,10 +8,10 @@ public class Data
 {
 
 	/** The title1. */
-	private String title1;
+	private String name;
 
-	/** The title2. */
-	private String title2;
+	/** The id. */
+	private String id;
 
 	/** The description. */
 	private String desc;
@@ -32,9 +32,9 @@ public class Data
 	 * @param image1
 	 *            the image1
 	 */
-	public Data(String title1, String desc, int image1)
+	public Data(String name, String desc, int image1)
 	{
-		this.title1 = title1;
+		this.name = name;
 		this.desc = desc;
 		this.image1 = image1;
 	}
@@ -46,21 +46,31 @@ public class Data
 	 * @param image1 the image1
 	 * @param image2 the image2
 	 */
-	public Data(String title1, int image1, int image2)
+	public Data(String name, int image1, int image2)
 	{
-		this.title1 = title1;
+		this.name = name;
 		this.image1 = image1;
 		this.image2 = image2;
 	}
+	
+	public Data(String id, String name, String desc, int image1)
+	{
+		this.id = id;
+		this.name = name;
+		this.desc = desc;
+		this.image1 = image1;
+		
+	}
+
 
 	/**
 	 * Gets the title1.
 	 * 
 	 * @return the title1
 	 */
-	public String getTitle1()
+	public String getName()
 	{
-		return title1;
+		return name;
 	}
 
 	/**
@@ -69,30 +79,30 @@ public class Data
 	 * @param title1
 	 *            the new title1
 	 */
-	public void setTitle1(String title1)
+	public void setName(String name)
 	{
-		this.title1 = title1;
+		this.name = name;
 	}
 
 	/**
-	 * Gets the title2.
+	 * Gets the id.
 	 * 
-	 * @return the title2
+	 * @return the id
 	 */
-	public String getTitle2()
+	public String getId()
 	{
-		return title2;
+		return id;
 	}
 
 	/**
-	 * Sets the title2.
+	 * Sets the id.
 	 * 
-	 * @param title2
-	 *            the new title2
+	 * @param id
+	 *            the new id
 	 */
-	public void setTitle2(String title2)
+	public void setId(String id)
 	{
-		this.title2 = title2;
+		this.id = id;
 	}
 
 	/**

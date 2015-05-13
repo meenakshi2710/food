@@ -1,28 +1,22 @@
 package com.food.ui;
 
-import java.util.List;
-
-import android.app.SearchManager;
-import android.app.SearchableInfo;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
 
 import com.food.Login;
+import com.food.MainActivity;
 import com.food.R;
-import com.food.R.id;
-import com.food.R.layout;
-import com.food.custom.CustomActivity;
 import com.food.custom.CustomFragment;
+import com.food.model.Music;
 
 /**
  * The main Search screen, launched when user click on Search button on Top
@@ -33,7 +27,15 @@ import com.food.custom.CustomFragment;
 public class Settings extends CustomFragment implements OnClickListener
 {
 
+	final String LOG_OUT = "event_logout";
 	private Button btnLogout;
+	MainActivity activity;
+	private MediaPlayer player;
+	
+	public Settings(MainActivity activity, MediaPlayer player) {
+		this.activity = activity;
+		this.player = player;
+	}
 	/* (non-Javadoc)
 	 * @see com.food.custom.CustomActivity#onCreate(android.os.Bundle)
 	 */
@@ -51,6 +53,7 @@ public class Settings extends CustomFragment implements OnClickListener
 		
 		btnLogout = (Button) v.findViewById(R.id.logout);
 		btnLogout.setOnClickListener(this);
+		System.out.println(" ### activity is : " + getActivity());
 		
 		return v;
 	}	
@@ -60,7 +63,20 @@ public class Settings extends CustomFragment implements OnClickListener
 		super.onClick(v);
 
 		if (v == btnLogout) {
-		   startActivity(new Intent(getActivity(), Login.class));
+			
+			if(player != null){
+				System.out.println("its not null!");
+				System.out.println(player.isPlaying());
+			}
+			if (this.activity.player.isPlaying()) {
+	        	System.out.println("stopping now....");
+	        	this.activity.player.stop();
+	        	this.activity.player.release();
+	        }
+			
+			
+			startActivity(new Intent(getActivity(), Login.class));
+			
 		}
 	}
 

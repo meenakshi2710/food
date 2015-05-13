@@ -11,7 +11,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical" >
-<LinearLayout
+        
+        <LinearLayout
+        android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/main_color_gray_dk1"
@@ -94,7 +96,7 @@
             android:divider="@color/gray_light"
             android:dividerHeight="@dimen/divider" />
 
-        <Button
+     <!--    <Button
             android:id="@+id/logout"
             style="@style/btn"
             android:layout_width="match_parent"
@@ -107,6 +109,7 @@
             android:text="@string/signout"
             android:textColor="@color/white"
             android:textSize="@dimen/txt_16sp" />
+      -->
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

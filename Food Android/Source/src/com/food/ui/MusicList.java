@@ -2,21 +2,18 @@ package com.food.ui;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.media.MediaPlayer.OnBufferingUpdateListener;
+import android.media.MediaPlayer.OnCompletionListener;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,39 +27,35 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.food.MainActivity;
 import com.food.R;
 import com.food.Search;
 import com.food.custom.CustomFragment;
 import com.food.model.Data;
 import com.food.model.Music;
+import com.food.utils.TrystinMusic;
 /**
  * The Class MusicList is the Fragment class that is launched when the user
- * clicks on Music option. It simply display a
- * dummy list of Radio stations. You need to write actual implementation for loading
- * and displaying radio stations.
+ * clicks on Music option.
  */
 public class MusicList extends CustomFragment implements OnClickListener
 {
 
 	private ConnectivityManager connMgr;
-	
+	TrystinMusic tRadio = new TrystinMusic();
+ 	
 	/** The Category list. */
 	private ArrayList<Data> musicList;
     private Button buttonPlay;
     private Button buttonStopPlay;
     private MediaPlayer player;
     private boolean isPlaying = false;
-    MainActivity activity;
     View v;
-    int curPlaying = -1;
+    int curPlaying, toPlay;
     ListView list =  null;
     Context context;
-    int poss;
     ProgressDialog mediaPlayerLoadingBar;
     Music[] oMusic;
     
@@ -77,13 +70,10 @@ public class MusicList extends CustomFragment implements OnClickListener
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(player.isPlaying()){
-			buttonPlay.setEnabled(false);
-	        buttonStopPlay.setEnabled(true);
-	        isPlaying = true;
-            System.out.println("## playing : " + curPlaying );
-	    } 
+        System.out.println(" ### activity is : " + getActivity());
+       
     }
+    
     
     /* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
@@ -121,6 +111,14 @@ public class MusicList extends CustomFragment implements OnClickListener
         buttonStopPlay.setEnabled(false);
         buttonStopPlay.setOnClickListener(this);
         
+        if(player.isPlaying()){
+			buttonPlay.setEnabled(false);
+	        buttonStopPlay.setEnabled(true);
+	        isPlaying = true;
+	        buttonPlay.setText("Playing " + oMusic[toPlay].getTitle());
+            Toast.makeText(getActivity(),"Playing - " + oMusic[curPlaying].getTitle(),Toast.LENGTH_LONG).show();
+	    } 
+        
     }
 
 	public void onClick(View v) {
@@ -128,11 +126,9 @@ public class MusicList extends CustomFragment implements OnClickListener
 			Toast.makeText(getActivity(), "No Internet Connection!",Toast.LENGTH_LONG).show();
 			startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
 		}
-
 		if (v == buttonPlay) {
 			player = new MediaPlayer();
 			startPlaying(0);
-        	activity.playing = 0;
         } else if (v == buttonStopPlay) {
             stopPlaying();
         } 
@@ -145,7 +141,108 @@ public class MusicList extends CustomFragment implements OnClickListener
 			player = new MediaPlayer();
 		}
 	
-        poss = pos;
+		toPlay = pos;
+		
+		if (toPlay == 0){
+			while(tRadio.tList.size() == 0) {
+	     		try {
+					Thread.sleep(2000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+	     	}
+	    	
+	     	String currURL = tRadio.randomSong(tRadio.tList);
+		    tRadio(toPlay, currURL);
+		    
+         } else {
+			playRadio();
+		}
+		
+	}
+	private void tRadio(final int toPlay, final String currURL){
+		AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
+
+            @Override
+            protected void onPreExecute(){
+            	buttonStopPlay.setEnabled(true);
+                buttonPlay.setEnabled(false);
+            	try {
+                	String URL = currURL;
+                	player = new MediaPlayer();
+                	player.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    player.setDataSource(URL);
+                              		
+            		} catch (IllegalArgumentException e) {
+	                	e.printStackTrace();
+            		} catch (IllegalStateException e) {
+	                	e.printStackTrace();
+            		} catch (IOException e) {
+	                	e.printStackTrace();
+            		}
+            }
+
+            @Override
+            protected Void doInBackground(Void... params) {
+            	
+            	try {
+                	if(!player.isPlaying()) {
+                		player.prepare();
+                		player.start();
+            	        isPlaying = true;
+                	}
+        		} catch (IllegalStateException e) {
+        			e.printStackTrace();
+        		} catch (IOException e) {
+        			e.printStackTrace();
+        		} catch(Exception e) {
+        			e.printStackTrace();
+        		}
+            	
+            	return null;
+            }
+
+            protected void onPostExecute(Void result){
+            	
+            	if(isPlaying){
+                	curPlaying = toPlay;
+                	buttonPlay.setText("Playing " + oMusic[toPlay].getTitle());
+                } else {
+                	Toast.makeText(getActivity(),"Sorry, please try another station..",Toast.LENGTH_LONG).show();
+                	try{
+                		player.stop();
+                		player.release();
+                		isPlaying = false;
+                	} catch(Exception ex) {
+                	}
+                	
+                }
+            
+            }
+            
+
+        };
+        
+        task.execute((Void[])null);
+        
+        player.setOnCompletionListener(new OnCompletionListener() {
+			@Override
+			public void onCompletion(MediaPlayer arg0) {
+				player.stop();
+				player.release();
+				String currURL = tRadio.randomSong(tRadio.tList);
+				System.out.println("next song selected: " + currURL);
+	    		tRadio(toPlay, currURL);
+	    		isPlaying = false;
+				
+			}
+        });
+        
+	}
+	
+	
+	private void playRadio(){
+
         AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>(){
 
             @Override
@@ -154,7 +251,8 @@ public class MusicList extends CustomFragment implements OnClickListener
             	mediaPlayerLoadingBar = ProgressDialog.show(context, "", "Connecting, Please wait...", true);
                 
                 try {
-                	initializeMediaPlayer(poss);
+                	player = new MediaPlayer();
+                	initializeMediaPlayer(toPlay);
             		buttonStopPlay.setEnabled(true);
                     buttonPlay.setEnabled(false);
                     
@@ -171,10 +269,7 @@ public class MusicList extends CustomFragment implements OnClickListener
             	try {
                 	player.prepare();
         			player.start();
-        	        
         	        isPlaying = true;
-        	        buttonPlay.setText("Playing " + oMusic[poss].getTitle());
-        	        curPlaying = poss;
         	        
         		} catch (IllegalStateException e) {
         			e.printStackTrace();
@@ -190,17 +285,21 @@ public class MusicList extends CustomFragment implements OnClickListener
             	
             	mediaPlayerLoadingBar.dismiss();
             	if(isPlaying){
-                	Toast.makeText(getActivity(),"Now Playing - " + oMusic[poss].getTitle(),Toast.LENGTH_LONG).show();
+                	Toast.makeText(getActivity(),"Now Playing - " + oMusic[toPlay].getTitle(),Toast.LENGTH_LONG).show();
+                	curPlaying = toPlay;
+                	System.out.println("curPlaying is now set to : " + curPlaying);
+                	buttonPlay.setText("Playing " + oMusic[toPlay].getTitle());
             	} else {
-                	Toast.makeText(getActivity(),"Sorry, please try again..",Toast.LENGTH_LONG).show();
+                	Toast.makeText(getActivity(),"Sorry, please try another station..",Toast.LENGTH_LONG).show();
             	}
         }
 
         };
         
         task.execute((Void[])null);
-    
-    }
+        
+
+	}
         
     private void stopPlaying() {
     	if (player.isPlaying()) {
@@ -307,7 +406,7 @@ public class MusicList extends CustomFragment implements OnClickListener
 
 			Data c = getItem(pos);
 			TextView lbl = (TextView) v.findViewById(R.id.lbl1);
-			lbl.setText(c.getTitle1());
+			lbl.setText(c.getName());
 
 			lbl = (TextView) v.findViewById(R.id.lbl2);
 			lbl.setText(c.getDesc());
@@ -350,6 +449,9 @@ public class MusicList extends CustomFragment implements OnClickListener
 		boolean isMobileConn = networkInfo.isConnected();
 		return isWifiConn;
 	}
+	
+	
+        
 	
 	
 }
