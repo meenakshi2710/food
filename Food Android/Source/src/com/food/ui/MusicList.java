@@ -295,13 +295,11 @@ public class MusicList extends CustomFragment implements OnClickListener
         }
 
         };
-        
         task.execute((Void[])null);
         
-
 	}
         
-    private void stopPlaying() {
+    public void stopPlaying() {
     	if (player.isPlaying()) {
         	System.out.println("stopping now....");
         	player.stop();
@@ -449,9 +447,6 @@ public class MusicList extends CustomFragment implements OnClickListener
 		boolean isMobileConn = networkInfo.isConnected();
 		return isWifiConn;
 	}
-	
-	
-        
 	
 	
 }

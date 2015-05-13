@@ -207,10 +207,11 @@ public final class R {
         public static final int dubai_1016=0x7f06001b;
         public static final int edit_icon=0x7f060023;
         public static final int email=0x7f060008;
-        public static final int food_detail_txt=0x7f060024;
+        public static final int food_detail_txt=0x7f060025;
         public static final int forgot_my_pwd=0x7f060003;
         public static final int have_account=0x7f06000e;
         public static final int hindi_evergreen=0x7f060020;
+        public static final int img_border=0x7f060024;
         public static final int ingr=0x7f060014;
         public static final int keep_me_signin=0x7f06000b;
         public static final int music=0x7f060016;

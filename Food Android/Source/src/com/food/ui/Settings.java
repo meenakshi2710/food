@@ -1,5 +1,6 @@
 package com.food.ui;
 
+import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -53,7 +54,6 @@ public class Settings extends CustomFragment implements OnClickListener
 		
 		btnLogout = (Button) v.findViewById(R.id.logout);
 		btnLogout.setOnClickListener(this);
-		System.out.println(" ### activity is : " + getActivity());
 		
 		return v;
 	}	
@@ -64,16 +64,8 @@ public class Settings extends CustomFragment implements OnClickListener
 
 		if (v == btnLogout) {
 			
-			if(player != null){
-				System.out.println("its not null!");
-				System.out.println(player.isPlaying());
-			}
-			if (this.activity.player.isPlaying()) {
-	        	System.out.println("stopping now....");
-	        	this.activity.player.stop();
-	        	this.activity.player.release();
-	        }
-			
+			MusicList f = (MusicList) this.activity.fragments[9];
+			f.stopPlaying();
 			
 			startActivity(new Intent(getActivity(), Login.class));
 			

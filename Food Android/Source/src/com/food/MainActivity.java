@@ -15,7 +15,6 @@ import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
@@ -26,7 +25,6 @@ import com.food.ui.CategoryList;
 import com.food.ui.ChatterList;
 import com.food.ui.LeftNavAdapter;
 import com.food.ui.MusicList;
-import com.food.ui.MyFriendsList;
 import com.food.ui.MyProfile;
 import com.food.ui.RecipeList;
 import com.food.ui.Settings;
@@ -42,7 +40,7 @@ public class MainActivity extends CustomActivity
 	public MediaPlayer player = new MediaPlayer();
 	public int playing ;
 	private String[] titles = new String[10];
-	private Fragment[] fragments = new Fragment[10];
+	public Fragment[] fragments = new Fragment[10];
 	Music[] oMusic = new Music[12];
 	
 		/** The drawer layout. */
@@ -177,8 +175,8 @@ public class MainActivity extends CustomActivity
 		al.add(new Data("Browse Categories", R.drawable.ic_nav4, R.drawable.ic_nav4_sel));
 		al.add(new Data("My Profile", R.drawable.ic_nav5, R.drawable.ic_nav5_sel));
 		al.add(new Data("My Friends", R.drawable.ic_nav5, R.drawable.ic_nav5_sel));
-		al.add(new Data("Saved", R.drawable.ic_nav5, R.drawable.ic_nav5_sel));
 		al.add(new Data("My Favorites", R.drawable.ic_nav5, R.drawable.ic_nav5_sel));
+		al.add(new Data("Bookmarks", R.drawable.ic_nav5, R.drawable.ic_nav5_sel));
 		al.add(new Data("Settings", R.drawable.ic_nav6, R.drawable.ic_nav6_sel));
 		return al;
 	}
@@ -243,10 +241,10 @@ public class MainActivity extends CustomActivity
 			   return "Friends";
 		   case 6:
 			   enableAllTabs();
-			   return "Saved";
+			   return "My Favorites";
 		   case 7:
 			   enableAllTabs();
-			   return "My Favorites";
+			   return "Bookmarks";
 		   case 8:
 			   enableAllTabs();
 			   return "Settings";
@@ -437,6 +435,5 @@ public class MainActivity extends CustomActivity
  		oMusic[11] = new Music(11, "Radio Teentaal", "http://195.154.176.33:8000/;?icy=http", "", R.drawable.cat5);
  		
  	}
-     
      
 }
