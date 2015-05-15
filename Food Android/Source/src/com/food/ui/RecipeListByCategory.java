@@ -36,6 +36,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.food.DetailActivity;
 import com.food.R;
@@ -50,7 +51,7 @@ import com.food.utils.JSONParser;
  * Category from Category list. It simply display a dummy list of Recipes. You
  * need to write actual implementation for loading and displaying Recipes.
  */
-public class RecipeList extends CustomFragment
+public class RecipeListByCategory extends CustomFragment
 {
 
 	/** The Activity list. */
@@ -59,10 +60,15 @@ public class RecipeList extends CustomFragment
 	public String username, profile_name;
 	TextView name;
 	public Bitmap myBitmap;
+	public String categoryName;
+	public int categoryId;
 
 	private View v;
     
-	
+	public RecipeListByCategory(String categoryName, int categoryId){
+		this.categoryName = categoryName;
+		this.categoryId = categoryId;
+	}
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 */
@@ -83,14 +89,14 @@ public class RecipeList extends CustomFragment
 	 */
 	private void loadRecipeList()
 	{
-		
 		new AsyncTask<String, String, ArrayList<Data>>(){
 			
 		    ProgressDialog loadingBar;
 			 
 			 @Override
             protected void onPreExecute(){
-            	loadingBar = ProgressDialog.show(getActivity(), "", "Loading latest Recipes...", true);
+            	loadingBar = ProgressDialog.show(getActivity(), "", "Loading "+ categoryName, true);
+            	getActivity().getActionBar().setTitle("Recipes > " + categoryName);
             	recipeList = new ArrayList<Data>();
 			}
 			 
@@ -100,7 +106,7 @@ public class RecipeList extends CustomFragment
 			        JSONParser jParser = new JSONParser();
 			        
 			        // Getting JSON from URL
-			        JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getDishes.php");
+			        JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getDishesByCategory.php?categoryId="+categoryId);
 			          try {
 			        	  JSONArray  dishes = json.getJSONArray("dishes");
 			        	    // looping through All Recipes
@@ -117,7 +123,9 @@ public class RecipeList extends CustomFragment
 								recipeList.add(new Data(dishId, dishName, "by " + userName, myBitmap));
 			                 }
 			            } catch (JSONException e) {
-			                e.printStackTrace();
+			            	Toast.makeText(getActivity(), "No " + categoryName + " found! Please contribute here :)", Toast.LENGTH_LONG).show();
+		                    e.printStackTrace();
+		                    return null;
 			            } catch (IOException e) {
 					        e.printStackTrace();
 					        Log.e("Exception",e.getMessage());

@@ -37,20 +37,6 @@
             android:divider="@color/gray_light"
             android:dividerHeight="@dimen/divider" />
 
-     <!--    <Button
-            android:id="@+id/logout"
-            style="@style/btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@color/main_color_gray"
-            android:drawableLeft="@drawable/ic_logout"
-            android:drawablePadding="@dimen/pad_10dp"
-            android:gravity="left|center_vertical"
-            android:padding="@dimen/pad_10dp"
-            android:text="@string/signout"
-            android:textColor="@color/white"
-            android:textSize="@dimen/txt_16sp" />
-      -->
     </LinearLayout>
 
 </android.support.v4.widget.DrawerLayout>

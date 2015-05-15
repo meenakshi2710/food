@@ -1,5 +1,7 @@
 package com.food.model;
 
+import android.graphics.Bitmap;
+
 /**
  * The Class Data is a simple Java Bean that is used to hold Name, Detail and
  * image pairs.
@@ -22,6 +24,9 @@ public class Data
 	/** The image2. */
 	private int image2;
 
+	/** The image3. */
+	private Bitmap image3;
+	
 	/**
 	 * Instantiates a new feed class.
 	 * 
@@ -38,6 +43,7 @@ public class Data
 		this.desc = desc;
 		this.image1 = image1;
 	}
+	
 
 	/**
 	 * Instantiates a new data.
@@ -62,6 +68,13 @@ public class Data
 		
 	}
 
+	public Data(String id, String name, String desc, Bitmap image3)
+	{
+		this.id = id;
+		this.name = name;
+		this.desc = desc;
+		this.image3 = image3;
+	}
 
 	/**
 	 * Gets the title1.
@@ -166,6 +179,26 @@ public class Data
 	public void setImage2(int image2)
 	{
 		this.image2 = image2;
+	}
+	/**
+	 * Gets the image3.
+	 * 
+	 * @return the image3
+	 */
+	public Bitmap getImage3()
+	{
+		return image3;
+	}
+
+	/**
+	 * Sets the image3.
+	 * 
+	 * @param image3
+	 *            the new image3
+	 */
+	public void setImage3(Bitmap image3)
+	{
+		this.image3 = image3;
 	}
 
 }

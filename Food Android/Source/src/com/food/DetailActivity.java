@@ -7,6 +7,7 @@ import android.view.View;
 import com.food.custom.CustomActivity;
 import com.food.ui.RecipeDetail;
 import com.food.ui.RecipeList;
+import com.food.ui.RecipeListByCategory;
 
 /**
  * The DetailActivity is the activity class that shows either the Recipe detail
@@ -28,8 +29,6 @@ public class DetailActivity extends CustomActivity
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setTitle("Recipes");
 
-		System.out.println("In Detail Activity");
-		
 		addFragment();
 	}
 
@@ -44,6 +43,11 @@ public class DetailActivity extends CustomActivity
 			String dishId = getIntent().getStringExtra("dishId");
 			getSupportFragmentManager().beginTransaction()
 					.replace(R.id.content_frame, new RecipeDetail(dishId)).commit();
+		} else if(getIntent().hasExtra("category")){
+			String categoryName = getIntent().getStringExtra("categoryName");
+			int categoryId = getIntent().getIntExtra("categoryId", 0);
+			getSupportFragmentManager().beginTransaction()
+			        .replace(R.id.content_frame, new RecipeListByCategory(categoryName, categoryId)).commit();
 		}
 		else
 		{

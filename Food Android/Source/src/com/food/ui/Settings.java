@@ -65,7 +65,8 @@ public class Settings extends CustomFragment implements OnClickListener
 		if (v == btnLogout) {
 			
 			MusicList f = (MusicList) this.activity.fragments[9];
-			f.stopPlaying();
+			if (f != null)
+				f.stopPlaying();
 			
 			startActivity(new Intent(getActivity(), Login.class));
 			

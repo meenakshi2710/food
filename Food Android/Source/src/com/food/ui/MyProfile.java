@@ -19,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.food.MainActivity;
 import com.food.R;
 import com.food.custom.CustomFragment;
 import com.food.utils.JSONParser;
@@ -36,6 +37,7 @@ public class MyProfile extends CustomFragment
 	public Bitmap myBitmap;
 	JSONObject user = new JSONObject();
 	ImageView image1;
+	
 	public MyProfile(String username){
 		this.username = username;
 	}
@@ -56,8 +58,12 @@ public class MyProfile extends CustomFragment
 	
 	private void initializeUIElements(View v) {
 		
+		MainActivity activity = (MainActivity) getActivity();
+		activity.enableAllTabs();
+		
 		image1 = (ImageView) v.findViewById(R.id.img1);
 		name = (TextView) v.findViewById(R.id.name);
+		
 	}
 	private void loadProfile()
 	{
@@ -74,7 +80,7 @@ public class MyProfile extends CustomFragment
 			    protected JSONObject doInBackground(String... args) {
 				    JSONParser jParser = new JSONParser();
 				    // Getting JSON from URL
-			        JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getUser.php?username="+username);
+			        JSONObject json = jParser.getJSONFromUrl("http://www.indiainme.com/api_getUser.php?username="+username);
 			          try {
 			        	     JSONArray  dishArray = json.getJSONArray("user");
 			        	     user = dishArray.getJSONObject(0);
@@ -104,4 +110,6 @@ public class MyProfile extends CustomFragment
 		}.execute();
 		
 	}
+	
+	
 }

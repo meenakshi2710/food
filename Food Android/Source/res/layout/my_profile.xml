@@ -38,6 +38,7 @@
 			android:scaleType="fitXY"
 			android:background="@drawable/edit_states"
 			android:src="@drawable/ic_action_edit"
+			android:onClick="loadImagefromGallery"
 			android:layout_alignParentBottom="true"
 			android:layout_alignParentRight="true"/>
         

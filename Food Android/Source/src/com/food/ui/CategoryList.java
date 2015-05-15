@@ -34,6 +34,7 @@ public class CategoryList extends CustomFragment
 
 	/** The Category list. */
 	private ArrayList<Data> catList;
+	private String[] categories= {"Snacks", "Breakfasts", "Appetizers", "Side Dishes", "Main Dishes", "Desserts", "Bevarages", "Veggies" };
 
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
@@ -53,7 +54,11 @@ public class CategoryList extends CustomFragment
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 					long arg3)
 			{
-				startActivity(new Intent(getActivity(), DetailActivity.class));
+				Intent myIntent = new Intent(getActivity(), DetailActivity.class);
+				myIntent.putExtra("category", true);
+				myIntent.putExtra("categoryName", categories[pos]);
+				myIntent.putExtra("categoryId", pos);
+				startActivity(myIntent);
 			}
 		});
 
@@ -68,17 +73,20 @@ public class CategoryList extends CustomFragment
 	private void loadCategoryList()
 	{
 		ArrayList<Data> pList = new ArrayList<Data>();
-		pList.add(new Data("Appetizer", "69", R.drawable.cat1));
-		pList.add(new Data("Bevarages", "42", R.drawable.cat2));
-		pList.add(new Data("Breakfasts", "87", R.drawable.cat3));
-		pList.add(new Data("Desserts", "34", R.drawable.cat4));
-		pList.add(new Data("Main Dishes", "94", R.drawable.cat5));
-		pList.add(new Data("Side Dishes", "12", R.drawable.cat6));
-		pList.add(new Data("Veggies", "12", R.drawable.cat1));
 		pList.add(new Data("Snacks", "12", R.drawable.cat2));
+		pList.add(new Data("Breakfasts", "87", R.drawable.cat3));
+		pList.add(new Data("Appetizers", "69", R.drawable.cat1));
+		pList.add(new Data("Side Dishes", "12", R.drawable.cat6));
+		pList.add(new Data("Main Dishes", "94", R.drawable.cat5));
+		pList.add(new Data("Desserts", "34", R.drawable.cat4));
+		pList.add(new Data("Bevarages", "42", R.drawable.cat2));
+		pList.add(new Data("Veggies", "12", R.drawable.cat1));
+		
 
 		catList = new ArrayList<Data>(pList);
 		//catList.addAll(pList);
+		
+		
 	}
 
 	/**
