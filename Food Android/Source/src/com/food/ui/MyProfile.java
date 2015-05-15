@@ -80,7 +80,7 @@ public class MyProfile extends CustomFragment
 			        	     user = dishArray.getJSONObject(0);
 			        	     profile_name = user.getString("name");
 			        	     
-			        	     String img_src1 = "http://www.indiainme.com/" + user.getString("profile_image") + "." + user.getString("ext");
+			        	     String img_src1 = "http://www.indiainme.com/img/profile_image/" + user.getString("id_user") + "." + user.getString("ext");
 							 URL url = new URL(img_src1);
 						     myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 						     myBitmap = Bitmap.createScaledBitmap(myBitmap, 200, 200, true);

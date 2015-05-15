@@ -8,7 +8,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.SearchView.OnQueryTextListener;
 
 import com.food.custom.CustomActivity;
@@ -21,7 +23,7 @@ import com.food.custom.CustomActivity;
  */
 public class Search extends CustomActivity
 {
-
+	TextView name;
 	/* (non-Javadoc)
 	 * @see com.food.custom.CustomActivity#onCreate(android.os.Bundle)
 	 */
@@ -31,6 +33,8 @@ public class Search extends CustomActivity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.search);
 
+		name = (TextView) findViewById(R.id.query);
+		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
@@ -65,8 +69,9 @@ public class Search extends CustomActivity
 			@Override
 			public boolean onQueryTextSubmit(String query)
 			{
-				// TODO Auto-generated method stub
-				return false;
+				// this is your adapter that will be filtered
+				name.setText("Showing Results for: " + query);
+	            return true;
 			}
 
 			@Override

@@ -195,8 +195,6 @@ public class RecipeDetail extends CustomFragment
 		img_src1 = "http://www.indiainme.com/" + dish.getString("imagePrefix1") + "." + dish.getString("extImage1");
 		
 		new AsyncTask<Void, Void, ArrayList<Bitmap>>(){
-			
-			
 			 @Override
 	            protected void onPreExecute(){
 	                
@@ -214,8 +212,6 @@ public class RecipeDetail extends CustomFragment
 				        Log.e("Exception",e.getMessage());
 				        return null;
 				    }
-			 
-				 
 			    }
 			 protected void onPostExecute(ArrayList<Bitmap> images){
 				 image1.setImageBitmap(images.get(0)); 
