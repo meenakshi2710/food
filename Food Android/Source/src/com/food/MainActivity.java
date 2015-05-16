@@ -2,6 +2,11 @@ package com.food;
 
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 
 import android.app.ProgressDialog;
@@ -21,6 +26,7 @@ import android.support.v4.app.FragmentManager.OnBackStackChangedListener;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Base64;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -526,7 +532,7 @@ public class MainActivity extends CustomActivity
                          options);
                  ByteArrayOutputStream stream = new ByteArrayOutputStream();
                  // Must compress the Image to reduce image size to make upload easy
-                 bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
+                 //bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
                  byte[] byte_arr = stream.toByteArray();
                  // Encode Image to String
                  encodedString = Base64.encodeToString(byte_arr, 0);
@@ -544,68 +550,105 @@ public class MainActivity extends CustomActivity
      }
      public void triggerImageUpload() {
     	 System.out.println("*** need to push to server now!");
-    	 //makeHTTPCall();
+    	 makeHTTPCall();
      }
   
-     /*
+     
      // Make Http call to upload Image to Php server
      public void makeHTTPCall() {
-         prgDialog.setMessage("Invoking Php");       
-         AsyncHttpClient client = new AsyncHttpClient();
-         // Don't forget to change the IP address to your LAN address. Port no as well.
-         client.post("http://192.168.2.5:9000/imgupload/upload_image.php",
-                 params, new AsyncHttpResponseHandler() {
-                     // When the response returned by REST has Http
-                     // response code '200'
-                     @Override
-                     public void onSuccess(String response) {
-                         // Hide Progress Dialog
-                         prgDialog.hide();
-                         Toast.makeText(getApplicationContext(), response,
-                                 Toast.LENGTH_LONG).show();
-                     }
-  
-                     // When the response returned by REST has Http
-                     // response code other than '200' such as '404',
-                     // '500' or '403' etc
-                     @Override
-                     public void onFailure(int statusCode, Throwable error,
-                             String content) {
-                         // Hide Progress Dialog
-                         prgDialog.hide();
-                         // When Http response code is '404'
-                         if (statusCode == 404) {
-                             Toast.makeText(getApplicationContext(),
-                                     "Requested resource not found",
-                                     Toast.LENGTH_LONG).show();
-                         }
-                         // When Http response code is '500'
-                         else if (statusCode == 500) {
-                             Toast.makeText(getApplicationContext(),
-                                     "Something went wrong at server end",
-                                     Toast.LENGTH_LONG).show();
-                         }
-                         // When Http response code other than 404, 500
-                         else {
-                             Toast.makeText(
-                                     getApplicationContext(),
-                                     "Error Occured \n Most Common Error: \n1. Device not connected to Internet\n2. Web App is not deployed in App server\n3. App server is not running\n HTTP Status code : "
-                                             + statusCode, Toast.LENGTH_LONG)
-                                     .show();
-                         }
-                     }
-                 });
+    	 // open a URL connection to the Servlet
+    	 String boundary = "*****";
+    	 String lineEnd = "\r\n";
+         String twoHyphens = "--";
+         int bytesRead, bytesAvailable, bufferSize;
+         byte[] buffer;
+         int maxBufferSize = 1 * 1024 * 1024; 
+         
+    	 try { 
+    		 FileInputStream fileInputStream = new FileInputStream(new File("/storage/emulated/0/Pictures/Screenshots/"+ fileName));
+    	 
+	         URL url = new URL("http://www.indiainme.com/api_uploadUserImg.php");
+	      
+	         // Open a HTTP  connection to  the URL
+	         HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+	         conn.setDoInput(true); // Allow Inputs
+	         conn.setDoOutput(true); // Allow Outputs
+	         conn.setUseCaches(false); // Don't use a Cached Copy
+	         conn.setRequestMethod("POST");
+	         conn.setRequestProperty("Connection", "Keep-Alive");
+	         conn.setRequestProperty("ENCTYPE", "multipart/form-data");
+	         conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+	         conn.setRequestProperty("uploaded_file", fileName); 
+	         
+	         DataOutputStream dos = new DataOutputStream(conn.getOutputStream());
+          
+             dos.writeBytes(twoHyphens + boundary + lineEnd);
+                    
+             dos.writeBytes(lineEnd);
+          
+             // create a buffer of  maximum size
+             bytesAvailable = fileInputStream.available();
+          
+             bufferSize = Math.min(bytesAvailable, maxBufferSize);
+             buffer = new byte[bufferSize];
+          
+             // read file and write it into form...
+             bytesRead = fileInputStream.read(buffer, 0, bufferSize); 
+                      
+             while (bytesRead > 0) {
+                        
+                     dos.write(buffer, 0, bufferSize);
+                     bytesAvailable = fileInputStream.available();
+                     bufferSize = Math.min(bytesAvailable, maxBufferSize);
+                     bytesRead = fileInputStream.read(buffer, 0, bufferSize);  
+                      
+                    }
+          
+                   // send multipart form data necesssary after file data...
+                   dos.writeBytes(lineEnd);
+                   dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+          
+                   // Responses from the server (code and message)
+                   int serverResponseCode = conn.getResponseCode();
+                   String serverResponseMessage = conn.getResponseMessage();
+                     
+                   Log.i("uploadFile", "HTTP Response is : "
+                           + serverResponseMessage + ": " + serverResponseCode);
+                    
+                   if(serverResponseCode == 200){
+                        
+                       runOnUiThread(new Runnable() {
+                            public void run() {
+                                 
+                                String msg = "File Upload Completed.\n\n See uploaded file here : \n\n"
+                                              +" http://www.androidexample.com/media/uploads/"
+                                              +fileName;
+                                 
+                                Toast.makeText(getApplicationContext(), "File Upload Complete.",
+                                             Toast.LENGTH_SHORT).show();
+                            }
+                        });               
+                   }   
+                    
+                   //close the streams //
+                   fileInputStream.close();
+                   dos.flush();
+                   dos.close();
+                     
+           } catch (Exception e) {
+                   
+                  e.printStackTrace();
+                   
+                  runOnUiThread(new Runnable() {
+                      public void run() {
+                          Toast.makeText(getApplicationContext(), "Got Exception : see logcat ",
+                                  Toast.LENGTH_SHORT).show();
+                      }
+                  });
+                  Log.e("Upload file to server Exception", "Exception : "
+                                                   + e.getMessage(), e); 
+              }
+
      }
-  
-     @Override
-     protected void onDestroy() {
-         // TODO Auto-generated method stub
-         super.onDestroy();
-         // Dismiss the progress bar when application is closed
-         if (prgDialog != null) {
-             prgDialog.dismiss();
-         }
-     }
-     */
      
 }
