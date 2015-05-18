@@ -45,6 +45,7 @@ import com.food.ui.LeftNavAdapter;
 import com.food.ui.MusicList;
 import com.food.ui.MyProfile;
 import com.food.ui.RecipeList;
+import com.food.ui.RecipeListByUser;
 import com.food.ui.Settings;
 
 /**
@@ -95,26 +96,6 @@ public class MainActivity extends CustomActivity
 		username = getIntent().getStringExtra("USERNAME");
 		
 	}
-	
-	/*
-	@Override
-	protected void onDestroy() {
-	  // Unregister since the activity is not visible
-	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
-	  System.out.println("kill main activity called");
-	  super.onDestroy();
-	}
-	
-	// handler for received Intents for logout event 
-	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-	  @Override
-	  public void onReceive(Context context, Intent intent) {
-		  System.out.println("kill main activity called");
-		  MainActivity.this.finish();
-		  finish();
-	  }
-	};
-	*/
 	
 	/**
 	 * Setup the drawer layout. This method also includes the method calls for
@@ -196,7 +177,7 @@ public class MainActivity extends CustomActivity
 		al.add(new Data("Recipes", R.drawable.ic_nav3, R.drawable.ic_nav3_sel));
 		al.add(new Data("Browse Categories", R.drawable.ic_nav4, R.drawable.ic_nav4_sel));
 		al.add(new Data("My Profile", R.drawable.ic_nav5, R.drawable.ic_nav5_sel));
-		al.add(new Data("My Friends", R.drawable.ic_nav5, R.drawable.ic_nav5_sel));
+		al.add(new Data("My Recipes", R.drawable.ic_nav5, R.drawable.ic_nav5_sel));
 		al.add(new Data("My Favorites", R.drawable.ic_nav5, R.drawable.ic_nav5_sel));
 		al.add(new Data("Bookmarks", R.drawable.ic_nav5, R.drawable.ic_nav5_sel));
 		al.add(new Data("Settings", R.drawable.ic_nav6, R.drawable.ic_nav6_sel));
@@ -260,7 +241,7 @@ public class MainActivity extends CustomActivity
 			   return "Profile";
 		   case 5:
 			   enableAllTabs();
-			   return "Friends";
+			   return "My Recipes";
 		   case 6:
 			   enableAllTabs();
 			   return "My Favorites";
@@ -293,7 +274,7 @@ public class MainActivity extends CustomActivity
 		   case 4:
 				 return new MyProfile(username);
 		   case 5:
-				 return new RecipeList();
+				 return new RecipeListByUser(username);
 		   case 6:
 				 return new RecipeList();
 		   case 7:
@@ -439,7 +420,7 @@ public class MainActivity extends CustomActivity
         
      private void setupMusicList() {
     	
- 		oMusic[0] = new Music(0, "Trystin Playlist", "", "", R.drawable.cat1);
+ 		oMusic[0] = new Music(0, "Trystin Music", "", "", R.drawable.cat1);
  		oMusic[1] = new Music(1, "Bollywood Hungama", "http://www.live365.com/play/bollywoodhungama", "", R.drawable.cat2);
  		oMusic[2] = new Music(2, "Dubai 101.6", "http://5303.live.streamtheworld.com/ARNCITY_SC", "", R.drawable.cat3);
  		oMusic[3] = new Music(3, "Desi Music Mix", "http://s1.desimusicmix.com:8014/;?icy=http", "", R.drawable.cat4);
