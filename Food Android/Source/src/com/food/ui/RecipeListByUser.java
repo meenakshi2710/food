@@ -115,12 +115,12 @@ public class RecipeListByUser extends CustomFragment
 
 			                    String dishId = c.getString("dishId");
 			                    String dishName = c.getString("dishName");
-			                    String userName = c.getString("userName");
+			                    String name = c.getString("name");
 			                    String img_src1 = "http://www.indiainme.com/" + c.getString("imagePrefix1") + "." + c.getString("extImage1");
 			            		URL url = new URL(img_src1);
 								myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 								myBitmap = Bitmap.createScaledBitmap(myBitmap, 50, 50, true);
-								recipeList.add(new Data(dishId, dishName, "by " + userName, myBitmap));
+								recipeList.add(new Data(dishId, dishName, "by " + name, myBitmap));
 			                 }
 			            } catch (JSONException e) {
 			            	Toast.makeText(getActivity(), "No dishes found!", Toast.LENGTH_LONG).show();

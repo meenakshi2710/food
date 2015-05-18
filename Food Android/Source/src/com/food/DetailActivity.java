@@ -2,9 +2,9 @@ package com.food;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.food.custom.CustomActivity;
+import com.food.ui.PostDetail;
 import com.food.ui.RecipeDetail;
 import com.food.ui.RecipeList;
 import com.food.ui.RecipeListByCategory;
@@ -48,6 +48,10 @@ public class DetailActivity extends CustomActivity
 			int categoryId = getIntent().getIntExtra("categoryId", 0);
 			getSupportFragmentManager().beginTransaction()
 			        .replace(R.id.content_frame, new RecipeListByCategory(categoryName, categoryId)).commit();
+		} else if(getIntent().hasExtra("post")){
+			int postId = getIntent().getIntExtra("postId", 0);
+			getSupportFragmentManager().beginTransaction()
+			        .replace(R.id.content_frame, new PostDetail(postId)).commit();
 		}
 		else
 		{

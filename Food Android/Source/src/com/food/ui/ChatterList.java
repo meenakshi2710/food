@@ -50,7 +50,7 @@ public class ChatterList extends CustomFragment
 {
 
 	/** The Activity list. */
-	private ArrayList<Data> recipeList;
+	private ArrayList<Data> chatterList;
 
 	private ArrayList<Data> newList;
 	private View v;
@@ -84,7 +84,7 @@ public class ChatterList extends CustomFragment
 			 @Override
             protected void onPreExecute(){
             	loadingBar = ProgressDialog.show(getActivity(), "", "Loading Posts...", true);
-            	recipeList = new ArrayList<Data>();
+            	chatterList = new ArrayList<Data>();
 			}
 			 
 			 @Override
@@ -102,9 +102,9 @@ public class ChatterList extends CustomFragment
 
 			                    String postId = c.getString("postId");
 			                    String postName = c.getString("postName");
-			                    String userName = c.getString("userName");
+			                    String name = c.getString("name");
 			                    
-			                    recipeList.add(new Data(postId, postName, "by " + userName, R.drawable.img1));
+			                    chatterList.add(new Data(postId, postName, "by " + name, R.drawable.img1));
 			                    
 			                 }
 			            } catch (JSONException e) {
@@ -125,8 +125,10 @@ public class ChatterList extends CustomFragment
 						public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 								long arg3)
 						{
-							startActivity(new Intent(getActivity(), DetailActivity.class)
-									.putExtra("detail", true));
+							Intent myIntent = new Intent(getActivity(), DetailActivity.class);
+							myIntent.putExtra("post", true);
+							myIntent.putExtra("postId", chatterList.get(pos).getId());
+							startActivity(myIntent);
 						}
 					});
 
@@ -152,7 +154,7 @@ public class ChatterList extends CustomFragment
 		@Override
 		public int getCount()
 		{
-			return recipeList.size();
+			return chatterList.size();
 		}
 
 		/* (non-Javadoc)
@@ -161,7 +163,7 @@ public class ChatterList extends CustomFragment
 		@Override
 		public Data getItem(int arg0)
 		{
-			return recipeList.get(arg0);
+			return chatterList.get(arg0);
 		}
 
 		/* (non-Javadoc)

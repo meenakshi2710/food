@@ -160,7 +160,7 @@ public class RecipeDetail extends CustomFragment
 				   setHasOptionsMenu(true);
 				   try {
 					rDishName.setText(dish.getString("dishName"));
-					rUserName.setText("by " + dish.getString("userName"));
+					rUserName.setText("by " + dish.getString("name"));
 					rDescription.setText(dish.getString("shortDescription"));
 					loadImages();
 					
