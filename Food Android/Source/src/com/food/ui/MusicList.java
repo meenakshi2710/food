@@ -352,7 +352,8 @@ public class MusicList extends CustomFragment implements OnClickListener
 		pList.add(new Data(oMusic[9].getTitle(), "42 listeners", oMusic[9].getImage1()));
 		pList.add(new Data(oMusic[10].getTitle(), "80 listeners", oMusic[10].getImage1()));
 		pList.add(new Data(oMusic[11].getTitle(), "94 listeners", oMusic[11].getImage1()));
-
+		pList.add(new Data(oMusic[12].getTitle(), "94 listeners", oMusic[11].getImage1()));
+		
 		musicList = new ArrayList<Data>(pList);
 		
 	}

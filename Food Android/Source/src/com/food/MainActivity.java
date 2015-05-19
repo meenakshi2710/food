@@ -420,7 +420,7 @@ public class MainActivity extends CustomActivity
         
      private void setupMusicList() {
     	
- 		oMusic[0] = new Music(0, "Trystin Music", "", "", R.drawable.cat1);
+ 		oMusic[0] = new Music(0, "Trystin Nach le", "", "", R.drawable.cat1);
  		oMusic[1] = new Music(1, "Bollywood Hungama", "http://www.live365.com/play/bollywoodhungama", "", R.drawable.cat2);
  		oMusic[2] = new Music(2, "Dubai 101.6", "http://5303.live.streamtheworld.com/ARNCITY_SC", "", R.drawable.cat3);
  		oMusic[3] = new Music(3, "Desi Music Mix", "http://s1.desimusicmix.com:8014/;?icy=http", "", R.drawable.cat4);
@@ -432,7 +432,7 @@ public class MainActivity extends CustomActivity
  		oMusic[9] = new Music(9, "Hindi Evergreen", "http://50.7.77.114:8296/;?icy=http", "", R.drawable.cat3);
  		oMusic[10] = new Music(10, "Spice Box", "http://96.30.15.163:8039/;?icy=http", "", R.drawable.cat4);
  		oMusic[11] = new Music(11, "Radio Teentaal", "http://195.154.176.33:8000/;?icy=http", "", R.drawable.cat5);
- 		
+ 		oMusic[0] = new Music(12, "Trystin Mehefil Mix", "", "", R.drawable.cat1);
  	}
      
      public void loadImagefromGallery(View view) {
