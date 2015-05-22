@@ -1,6 +1,7 @@
 package com.food.ui;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -39,10 +40,12 @@ public class RecipeDetail extends CustomFragment
     TextView rDishName, rUserName, rDescription;
     Button rDesc, rProc, rIngr; 
     LinearLayout recipe_desc;
-    ImageView image1, image2, image3, image4, image5, image6;
+    ImageView rUserImage, image1, image2, image3, image4, image5, image6;
     String img_src1 = null, img_src2 = null, img_src3 = null, img_src4 = null, img_src5 = null, img_src6 = null; 
     JSONObject dish = new JSONObject();
-	
+    JSONObject user = new JSONObject();
+    public Bitmap myBitmap;
+    
     public RecipeDetail(String dishId){
 		this.dishId = dishId;
 	}
@@ -65,6 +68,7 @@ public class RecipeDetail extends CustomFragment
 		rDishName = (TextView) v.findViewById(R.id.dishName);
 		rUserName = (TextView) v.findViewById(R.id.userName);
 		rDescription = (TextView) v.findViewById(R.id.description);
+		rUserImage = (ImageView) v.findViewById(R.id.user_profile);
 		
 		recipe_desc = (LinearLayout) v.findViewById(R.id.layout_desc);
 		
@@ -148,10 +152,22 @@ public class RecipeDetail extends CustomFragment
 			          try {
 			        	     JSONArray  dishArray = json.getJSONArray("dish");
 			        	     dish = dishArray.getJSONObject(0);
+			        	     String username = dish.getString("username");
 			                    
+			        	     JSONObject user_json = jParser.getJSONFromUrl("http://www.indiainme.com/api_getUser.php?username="+username);
+		                     JSONArray  userArray = user_json.getJSONArray("user");
+					         user = userArray.getJSONObject(0);
+					         String img_src1 = "http://www.indiainme.com/img/profile_image/" + user.getString("id_user") + "." + user.getString("ext");
+					         URL url = new URL(img_src1);
+								
+			            	 myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+							 myBitmap = Bitmap.createScaledBitmap(myBitmap, 50, 50, true);		   
 			            } catch (JSONException e) {
 			                e.printStackTrace();
-			            }
+			            } catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
 			        return dish;
 			    }
 			 
@@ -162,6 +178,7 @@ public class RecipeDetail extends CustomFragment
 					rDishName.setText(dish.getString("dishName"));
 					rUserName.setText("by " + dish.getString("name"));
 					rDescription.setText(dish.getString("shortDescription"));
+					rUserImage.setImageBitmap(myBitmap);
 					loadImages();
 					
 				   } catch (JSONException e) {

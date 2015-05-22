@@ -44,6 +44,7 @@ import com.food.Search;
 import com.food.custom.CustomFragment;
 import com.food.model.Data;
 import com.food.utils.JSONParser;
+import com.food.utils.RecipeUtil;
 
 /**
  * The Class RecipeList is the Fragment class that is launched when the user
@@ -116,21 +117,14 @@ public class RecipeListByUser extends CustomFragment
 			                    String dishId = c.getString("dishId");
 			                    String dishName = c.getString("dishName");
 			                    String name = c.getString("name");
-			                    String img_src1 = "http://www.indiainme.com/" + c.getString("imagePrefix1") + "." + c.getString("extImage1");
-			            		URL url = new URL(img_src1);
-								myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-								myBitmap = Bitmap.createScaledBitmap(myBitmap, 50, 50, true);
-								recipeList.add(new Data(dishId, dishName, "by " + name, myBitmap));
+			                    int categoryId = RecipeUtil.setCategoryImage(c.getInt("category"));
+			                    recipeList.add(new Data(dishId, dishName, "by " + name, categoryId));
 			                 }
 			            } catch (JSONException e) {
 			            	Toast.makeText(getActivity(), "No dishes found!", Toast.LENGTH_LONG).show();
 		                    e.printStackTrace();
 		                    return null;
-			            } catch (IOException e) {
-					        e.printStackTrace();
-					        Log.e("Exception",e.getMessage());
-					        return null;
-					    }
+			            } 
 			        
 			        return recipeList;
 			    }
@@ -214,9 +208,8 @@ public class RecipeListByUser extends CustomFragment
 			lbl = (TextView) v.findViewById(R.id.user_name);
 			lbl.setText(c.getDesc());
 
-			ImageView img = (ImageView) v.findViewById(R.id.img1);
-			//img.setImageResource(c.getImage1());
-			img.setImageBitmap(c.getImage3());
+			ImageView img = (ImageView) v.findViewById(R.id.category);
+			img.setImageResource(c.getImage1());
 			return v;
 		}
 

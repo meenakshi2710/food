@@ -1,18 +1,7 @@
 package com.food.ui;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,10 +9,8 @@ import org.json.JSONObject;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,6 +30,7 @@ import com.food.Search;
 import com.food.custom.CustomFragment;
 import com.food.model.Data;
 import com.food.utils.JSONParser;
+import com.food.utils.RecipeUtil;
 
 /**
  * The Class RecipeList is the Fragment class that is launched when the user
@@ -110,29 +98,23 @@ public class RecipeList extends CustomFragment
 			                    String dishId = c.getString("dishId");
 			                    String dishName = c.getString("dishName");
 			                    String name = c.getString("name");
-			                    String img_src1 = "http://www.indiainme.com/" + c.getString("imagePrefix1") + "." + c.getString("extImage1");
-			            		URL url = new URL(img_src1);
-								myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-								myBitmap = Bitmap.createScaledBitmap(myBitmap, 50, 50, true);
-								recipeList.add(new Data(dishId, dishName, "by " + name, myBitmap));
+			                    int categoryId = RecipeUtil.setCategoryImage(c.getInt("category"));
+			                    recipeList.add(new Data(dishId, dishName, "by " + name, categoryId));
 			                 }
 			            } catch (JSONException e) {
 			                e.printStackTrace();
-			            } catch (IOException e) {
-					        e.printStackTrace();
-					        Log.e("Exception",e.getMessage());
-					        return null;
-					    }
+			            } 
 			        
 			        return recipeList;
 			    }
 			 
-			 @Override
+
+			@Override
 		        protected void onPostExecute(ArrayList<Data> listt) {
 				   loadingBar.dismiss();
 				   ListView list = (ListView) v.findViewById(R.id.list);
 				   list.setAdapter(new RecipeAdapter());
-					list.setOnItemClickListener(new OnItemClickListener() {
+				   list.setOnItemClickListener(new OnItemClickListener() {
 
 						@Override
 						public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
@@ -206,9 +188,8 @@ public class RecipeList extends CustomFragment
 			lbl = (TextView) v.findViewById(R.id.user_name);
 			lbl.setText(c.getDesc());
 
-			ImageView img = (ImageView) v.findViewById(R.id.img1);
-			//img.setImageResource(c.getImage1());
-			img.setImageBitmap(c.getImage3());
+			ImageView img = (ImageView) v.findViewById(R.id.category);
+			img.setImageResource(c.getImage1());
 			return v;
 		}
 

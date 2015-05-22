@@ -2,7 +2,13 @@ package com.food.ui;
 
 import java.util.ArrayList;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -22,6 +28,8 @@ import com.food.R;
 import com.food.Search;
 import com.food.custom.CustomFragment;
 import com.food.model.Data;
+import com.food.utils.JSONParser;
+import com.food.utils.RecipeUtil;
 
 /**
  * The Class CategoryList is the Fragment class that is launched when the user
@@ -34,8 +42,11 @@ public class CategoryList extends CustomFragment
 
 	/** The Category list. */
 	private ArrayList<Data> catList;
+	int i;
+	String[] categoryNames = {"Snacks", "Breakfasts", "Appetizers", "Side Dishes", "Main Dishes", "Desserts", "Bevarages", "Veggies"};
+	int[] categoryImages = {R.drawable.cat2, R.drawable.cat3, R.drawable.cat1, R.drawable.cat6, R.drawable.cat5, R.drawable.cat4, R.drawable.cat2, R.drawable.cat1};
 	private String[] categories= {"Snacks", "Breakfasts", "Appetizers", "Side Dishes", "Main Dishes", "Desserts", "Bevarages", "Veggies" };
-
+	View v;
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 */
@@ -43,26 +54,9 @@ public class CategoryList extends CustomFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
-		View v = inflater.inflate(R.layout.recipe_list, null);
+		v = inflater.inflate(R.layout.recipe_list, null);
 
 		loadCategoryList();
-		ListView list = (ListView) v.findViewById(R.id.list);
-		list.setAdapter(new CategoryAdapter());
-		list.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
-					long arg3)
-			{
-				Intent myIntent = new Intent(getActivity(), DetailActivity.class);
-				myIntent.putExtra("category", true);
-				myIntent.putExtra("categoryName", categories[pos]);
-				myIntent.putExtra("categoryId", pos);
-				startActivity(myIntent);
-			}
-		});
-
-		setHasOptionsMenu(true);
 		return v;
 	}
 
@@ -72,20 +66,64 @@ public class CategoryList extends CustomFragment
 	 */
 	private void loadCategoryList()
 	{
-		ArrayList<Data> pList = new ArrayList<Data>();
-		pList.add(new Data("Snacks", "12", R.drawable.cat2));
-		pList.add(new Data("Breakfasts", "87", R.drawable.cat3));
-		pList.add(new Data("Appetizers", "69", R.drawable.cat1));
-		pList.add(new Data("Side Dishes", "12", R.drawable.cat6));
-		pList.add(new Data("Main Dishes", "94", R.drawable.cat5));
-		pList.add(new Data("Desserts", "34", R.drawable.cat4));
-		pList.add(new Data("Bevarages", "42", R.drawable.cat2));
-		pList.add(new Data("Veggies", "12", R.drawable.cat1));
-		
+			
+			new AsyncTask<String, String, Void>(){
+			
+				ProgressDialog loadingBar;
+			 
+				 @Override
+	            protected void onPreExecute(){
+	            	loadingBar = ProgressDialog.show(getActivity(), "", "Loading categories...", true);
+	            	catList = new ArrayList<Data>();
+				}
+				 
+				 @Override
+				    protected Void doInBackground(String... args) {
+				        
+				        JSONParser jParser = new JSONParser();
+				        
+				        for (i=0; i<8; i++) {
+				    		
+				          // Getting JSON from URL
+				          JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getDishesCountByCategory.php?categoryId="+i);
+				          try {
+				        	  JSONArray  dishes = json.getJSONArray("count");
+				        	    // looping through All Recipes
+				                JSONObject c = dishes.getJSONObject(0);
+				                catList.add(new Data(categoryNames[i], c.getString("total"), categoryImages[i]));
+				                 
+				            } catch (JSONException e) {
+				                e.printStackTrace();
+				            }
+				        }
+						return null; 
+				        
+				        
+				    }
+				 
+	
+				@Override
+			        protected void onPostExecute(Void params) {
+					   loadingBar.dismiss();
+					   ListView list = (ListView) v.findViewById(R.id.list);
+					   list.setAdapter(new CategoryAdapter());
+					   list.setOnItemClickListener(new OnItemClickListener() {
 
-		catList = new ArrayList<Data>(pList);
-		//catList.addAll(pList);
-		
+							@Override
+							public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
+									long arg3)
+							{
+								Intent myIntent = new Intent(getActivity(), DetailActivity.class);
+								myIntent.putExtra("category", true);
+								myIntent.putExtra("categoryName", categories[pos]);
+								myIntent.putExtra("categoryId", pos);
+								startActivity(myIntent);
+							}
+						});
+					   setHasOptionsMenu(true);
+			        }
+				 
+			}.execute();
 		
 	}
 
