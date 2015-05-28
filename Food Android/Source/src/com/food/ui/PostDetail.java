@@ -36,6 +36,7 @@ public class PostDetail extends CustomFragment
 	int postId;
 	TextView name;
 	public Bitmap myBitmap;
+	JSONObject post = new JSONObject();
 	JSONObject user = new JSONObject();
 	ImageView image1;
 	
@@ -50,7 +51,7 @@ public class PostDetail extends CustomFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
-		View v = inflater.inflate(R.layout.my_profile, null);
+		View v = inflater.inflate(R.layout.post_detail, null);
 		initializeUIElements(v);
 		loadProfile();
 		
@@ -59,11 +60,8 @@ public class PostDetail extends CustomFragment
 	
 	private void initializeUIElements(View v) {
 		
-		MainActivity activity = (MainActivity) getActivity();
-		activity.enableAllTabs();
-		
-		image1 = (ImageView) v.findViewById(R.id.img1);
-		name = (TextView) v.findViewById(R.id.name);
+		image1 = (ImageView) v.findViewById(R.id.user_profile);
+		name = (TextView) v.findViewById(R.id.userName);
 		
 	}
 	private void loadProfile()
@@ -78,17 +76,22 @@ public class PostDetail extends CustomFragment
 			}
 			 
 			 @Override
-			    protected JSONObject doInBackground(String... args) {
+			protected JSONObject doInBackground(String... args) {
 				    JSONParser jParser = new JSONParser();
+				    System.out.println("postID is:" + postId);
 				    // Getting JSON from URL
-			        JSONObject json = jParser.getJSONFromUrl("http://www.indiainme.com/api_getPost.php?id="+postId);
+			        JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getPost.php?postId="+postId);
 			          try {
-			        	     JSONArray  dishArray = json.getJSONArray("user");
-			        	     user = dishArray.getJSONObject(0);
-			        	     profile_name = user.getString("name");
+			        	     JSONArray  postArray = json.getJSONArray("post");
+			        	     post = postArray.getJSONObject(0);
+			        	     String username = post.getString("username");
 			        	     
-			        	     String img_src1 = "http://www.indiainme.com/img/profile_image/" + user.getString("id_user") + "." + user.getString("ext");
-							 URL url = new URL(img_src1);
+			        	     JSONObject user_json = jParser.getJSONFromUrl("http://www.indiainme.com/api_getUser.php?username="+username);
+		                     JSONArray  userArray = user_json.getJSONArray("user");
+					         user = userArray.getJSONObject(0);
+					         String img_src1 = "http://www.indiainme.com/img/profile_image/" + user.getString("id_user") + "." + user.getString("ext");
+					         URL url = new URL(img_src1);
+					         
 						     myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 						     myBitmap = Bitmap.createScaledBitmap(myBitmap, 200, 200, true);
 			            } catch (JSONException e) {
@@ -98,15 +101,22 @@ public class PostDetail extends CustomFragment
 					        Log.e("Exception",e.getMessage());
 					        return null;
 					    }
-			        return user;
+			        return post;
 			    }
 			 
 			 @Override
-		        protected void onPostExecute(JSONObject dish) {
-				   setHasOptionsMenu(true);
-				   image1.setImageBitmap(myBitmap); 
-				   name.setText(profile_name);
-				   loadingBar.dismiss();
+		    protected void onPostExecute(JSONObject dish) {
+				 try {
+						
+					 setHasOptionsMenu(true);
+					 image1.setImageBitmap(myBitmap); 
+					 name.setText(post.getString("name"));
+				 } catch (JSONException e) {
+					   // TODO Auto-generated catch block
+					   e.printStackTrace();
+				   }
+					 
+					 loadingBar.dismiss();
 				}
 		}.execute();
 		

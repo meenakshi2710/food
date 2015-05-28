@@ -83,7 +83,7 @@ public class Login extends CustomActivity
 	            		   intent.putExtra("USERNAME", username.trim());
 	            		   startActivity(intent);
 	            		   finish();
-	                       Toast.makeText(getApplicationContext(), "Welcome to Trystin", Toast.LENGTH_LONG).show();
+	                       //Toast.makeText(getApplicationContext(), "Welcome to Trystin", Toast.LENGTH_LONG).show();
 	                       break;
 	            	   case 2:
 	            		   // username/password incorrect
@@ -114,14 +114,14 @@ public class Login extends CustomActivity
 
             @Override
             protected void onPreExecute(){
-            	loadingBar = ProgressDialog.show(Login.this, "", "Connecting, Please wait...", true);
+            	loadingBar = ProgressDialog.show(Login.this, "", "Signing in..", true);
             }
 
             @Override
             protected String doInBackground(String... args) {
             	if(byGetOrPost == 1){ //means by Get Method
                     try{
-                       String link = "http://indiainme.com/iosLogin.php?username="+username+"&password="+password;URL url = new URL(link);
+                       String link = "http://indiainme.com/iosLogin.php?username="+username+"&password="+password;
                        HttpClient client = new DefaultHttpClient();
                        HttpGet request = new HttpGet();
                        request.setURI(new URI(link));

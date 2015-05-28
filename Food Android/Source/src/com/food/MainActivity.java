@@ -44,6 +44,7 @@ import com.food.ui.ChatterList;
 import com.food.ui.LeftNavAdapter;
 import com.food.ui.MusicList;
 import com.food.ui.MyProfile;
+import com.food.ui.NewMusicList;
 import com.food.ui.RecipeList;
 import com.food.ui.RecipeListByUser;
 import com.food.ui.Settings;
@@ -282,7 +283,7 @@ public class MainActivity extends CustomActivity
 		   case 8:
 				 return new Settings(this, player);
 		   case 9:
-				 return new MusicList(this, player, oMusic);
+				 return new NewMusicList(this, player, oMusic);
 		   default: 
 			    return new RecipeList();
 		}	
@@ -432,7 +433,7 @@ public class MainActivity extends CustomActivity
  		oMusic[9] = new Music(9, "Hindi Evergreen", "http://50.7.77.114:8296/;?icy=http", "", R.drawable.cat3);
  		oMusic[10] = new Music(10, "Spice Box", "http://96.30.15.163:8039/;?icy=http", "", R.drawable.cat4);
  		oMusic[11] = new Music(11, "Radio Teentaal", "http://195.154.176.33:8000/;?icy=http", "", R.drawable.cat5);
- 		oMusic[0] = new Music(12, "Trystin Mehefil Mix", "", "", R.drawable.cat1);
+ 		
  	}
      
      public void loadImagefromGallery(View view) {

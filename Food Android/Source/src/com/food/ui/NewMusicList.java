@@ -46,7 +46,7 @@ import com.food.utils.TrystinMusic;
  * The Class MusicList is the Fragment class that is launched when the user
  * clicks on Music option.
  */
-public class MusicList extends CustomFragment implements OnClickListener
+public class NewMusicList extends CustomFragment implements OnClickListener
 {
 
 	private ConnectivityManager connMgr;
@@ -67,7 +67,7 @@ public class MusicList extends CustomFragment implements OnClickListener
     int i;
     
     
-    public MusicList(Context context, MediaPlayer player, Music[] oMusic) {
+    public NewMusicList(Context context, MediaPlayer player, Music[] oMusic) {
 		connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		this.player = player;
 		this.context = context;
@@ -93,20 +93,7 @@ public class MusicList extends CustomFragment implements OnClickListener
 		v = inflater.inflate(R.layout.music_list, null); 
 		
 		loadMusicList();
-		list = (ListView) v.findViewById(R.id.list);
-		list.setAdapter(new MusicAdapter());
-		setHasOptionsMenu(true);
-		initializeUIElements(v);
 		
-		list.setOnItemClickListener(new OnItemClickListener() {
-	
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
-								long arg3)	{
-				list.setSelection(pos);
-				startPlaying(pos);
-			}
-		});
 		return v;
 	}
 	
@@ -123,11 +110,10 @@ public class MusicList extends CustomFragment implements OnClickListener
 			buttonPlay.setEnabled(false);
 	        buttonStopPlay.setEnabled(true);
 	        isPlaying = true;
-	        buttonPlay.setText("Playing " + oMusic[toPlay].getTitle());
-            Toast.makeText(getActivity(),"Playing - " + oMusic[curPlaying].getTitle(),Toast.LENGTH_LONG).show();
+	        buttonPlay.setText("Playing " + musicList.get(toPlay).getId());
+            Toast.makeText(getActivity(),"Playing - " + musicList.get(curPlaying).getId(),Toast.LENGTH_LONG).show();
 	    } 
-        
-    }
+     }
 
 	public void onClick(View v) {
 		if(!isInternetConnected()){
@@ -150,8 +136,7 @@ public class MusicList extends CustomFragment implements OnClickListener
 		}
 	
 		toPlay = pos;
-		
-		if (toPlay == 0){
+		if (musicList.get(pos).getId().contains("Trystin Nach Le")){
 			while(tRadio.tList.size() == 0) {
 	     		try {
 					Thread.sleep(2000);
@@ -214,13 +199,15 @@ public class MusicList extends CustomFragment implements OnClickListener
             	
             	if(isPlaying){
                 	curPlaying = toPlay;
-                	buttonPlay.setText("Playing " + oMusic[toPlay].getTitle());
+                	buttonPlay.setText("Playing " + musicList.get(toPlay).getId());
                 } else {
                 	Toast.makeText(getActivity(),"Sorry, please try another station..",Toast.LENGTH_LONG).show();
                 	try{
                 		player.stop();
                 		player.release();
                 		isPlaying = false;
+                		buttonStopPlay.setEnabled(false);
+                        buttonPlay.setEnabled(true);
                 	} catch(Exception ex) {
                 	}
                 	
@@ -293,10 +280,10 @@ public class MusicList extends CustomFragment implements OnClickListener
             	
             	mediaPlayerLoadingBar.dismiss();
             	if(isPlaying){
-                	Toast.makeText(getActivity(),"Now Playing - " + oMusic[toPlay].getTitle(),Toast.LENGTH_LONG).show();
+                	Toast.makeText(getActivity(),"Now Playing - " + musicList.get(toPlay).getId(),Toast.LENGTH_LONG).show();
                 	curPlaying = toPlay;
                 	System.out.println("curPlaying is now set to : " + curPlaying);
-                	buttonPlay.setText("Playing " + oMusic[toPlay].getTitle());
+                	buttonPlay.setText("Playing " + musicList.get(toPlay).getId());
             	} else {
                 	Toast.makeText(getActivity(),"Sorry, please try another station..",Toast.LENGTH_LONG).show();
             	}
@@ -321,8 +308,12 @@ public class MusicList extends CustomFragment implements OnClickListener
     }
     
     private void initializeMediaPlayer(int pos) {
-    	String URL = oMusic[pos].getURL();
+    	//String URL = oMusic[pos].getURL();
         
+    	String URL = musicList.get(pos).getDesc();
+    	
+    	//System.out.println("pos:" + pos + " , url:" + URL);
+    		
         player.setAudioStreamType(AudioManager.STREAM_MUSIC);
         try {
         	System.out.println("set url complete");
@@ -347,31 +338,13 @@ public class MusicList extends CustomFragment implements OnClickListener
 	 */
 	private void loadMusicList()
 	{
-		ArrayList<Data> pList = new ArrayList<Data>();
-		pList.add(new Data(oMusic[0].getTitle(), "69 listeners", oMusic[0].getImage1()));
-		pList.add(new Data(oMusic[1].getTitle(), "87 listeners", oMusic[1].getImage1()));
-		pList.add(new Data(oMusic[2].getTitle(), "34 listeners", oMusic[2].getImage1()));
-		pList.add(new Data(oMusic[3].getTitle(), "94 listeners", oMusic[3].getImage1()));
-		pList.add(new Data(oMusic[4].getTitle(), "42 listeners", oMusic[4].getImage1()));
-		pList.add(new Data(oMusic[5].getTitle(), "51 listeners", oMusic[5].getImage1()));
-		pList.add(new Data(oMusic[6].getTitle(), "39 listeners", oMusic[6].getImage1()));
-		pList.add(new Data(oMusic[7].getTitle(), "42 listeners", oMusic[7].getImage1()));
-		pList.add(new Data(oMusic[8].getTitle(), "21 listeners", oMusic[8].getImage1()));
-		pList.add(new Data(oMusic[9].getTitle(), "42 listeners", oMusic[9].getImage1()));
-		pList.add(new Data(oMusic[10].getTitle(), "80 listeners", oMusic[10].getImage1()));
-		pList.add(new Data(oMusic[11].getTitle(), "94 listeners", oMusic[11].getImage1()));
-		//pList.add(new Data(oMusic[12].getTitle(), "94 listeners", oMusic[11].getImage1()));
-		
-		musicList = new ArrayList<Data>(pList);
-		
-		
 		new AsyncTask<String, String, Void>(){
 			
 			ProgressDialog loadingBar;
 		 
 			 @Override
             protected void onPreExecute(){
-            	loadingBar = ProgressDialog.show(getActivity(), "", "Loading Music channels...", true);
+            	loadingBar = ProgressDialog.show(getActivity(), "", "Loading channels...", true);
             	musicList = new ArrayList<Data>();
 			}
 			 
@@ -380,15 +353,15 @@ public class MusicList extends CustomFragment implements OnClickListener
 			        
 			        JSONParser jParser = new JSONParser();
 			        
-			        for (i=0; i<11; i++) {
+			        for (i=0; i<8; i++) {
 			    		
 			          // Getting JSON from URL
-			          JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getDishesCountByCategory.php?categoryId="+i);
+			          JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getChannels.php");
 			          try {
-			        	  JSONArray  dishes = json.getJSONArray("count");
+			        	  JSONArray  channels = json.getJSONArray("channels");
 			        	    // looping through All Music channels
-			                JSONObject c = dishes.getJSONObject(0);
-			                //musicList.add(new Data(categoryNames[i], c.getString("total"), categoryImages[i]));
+			                JSONObject c = channels.getJSONObject(i);
+			                musicList.add(new Data(c.getString("title"), c.getString("like_total"), c.getString("url"), R.drawable.cat1));
 			                 
 			            } catch (JSONException e) {
 			                e.printStackTrace();
@@ -404,11 +377,11 @@ public class MusicList extends CustomFragment implements OnClickListener
 		        protected void onPostExecute(Void params) {
 				   loadingBar.dismiss();
 				   list = (ListView) v.findViewById(R.id.list);
-					list.setAdapter(new MusicAdapter());
-					setHasOptionsMenu(true);
-					initializeUIElements(v);
+				   list.setAdapter(new MusicAdapter());
+				   setHasOptionsMenu(true);
+				   initializeUIElements(v);
 					
-					list.setOnItemClickListener(new OnItemClickListener() {
+				   list.setOnItemClickListener(new OnItemClickListener() {
 				
 						@Override
 						public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
@@ -420,6 +393,7 @@ public class MusicList extends CustomFragment implements OnClickListener
 		        }
 			 
 		}.execute();
+	
 		
 	}
 
@@ -470,10 +444,10 @@ public class MusicList extends CustomFragment implements OnClickListener
 
 			Data c = getItem(pos);
 			TextView lbl = (TextView) v.findViewById(R.id.lbl1);
-			lbl.setText(c.getName());
+			lbl.setText(c.getId());
 
 			lbl = (TextView) v.findViewById(R.id.lbl2);
-			lbl.setText(c.getDesc());
+			lbl.setText(c.getName() + " likes");
 
 			ImageView img = (ImageView) v.findViewById(R.id.img1);
 			img.setImageResource(c.getImage1());
