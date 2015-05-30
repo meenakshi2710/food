@@ -119,14 +119,18 @@ public class MusicList extends CustomFragment implements OnClickListener
         buttonStopPlay.setEnabled(false);
         buttonStopPlay.setOnClickListener(this);
         
-        if(player.isPlaying()){
-			buttonPlay.setEnabled(false);
-	        buttonStopPlay.setEnabled(true);
-	        isPlaying = true;
-	        buttonPlay.setText("Playing " + oMusic[toPlay].getTitle());
-            Toast.makeText(getActivity(),"Playing - " + oMusic[curPlaying].getTitle(),Toast.LENGTH_LONG).show();
-	    } 
+        try{
+        	if(player.isPlaying()){
         
+				buttonPlay.setEnabled(false);
+		        buttonStopPlay.setEnabled(true);
+		        isPlaying = true;
+		        buttonPlay.setText("Playing " + oMusic[toPlay].getTitle());
+	            Toast.makeText(getActivity(),"Playing - " + oMusic[curPlaying].getTitle(),Toast.LENGTH_LONG).show();
+		    } 
+        } catch(IllegalStateException e) {
+        	e.printStackTrace();
+        }
     }
 
 	public void onClick(View v) {
@@ -219,7 +223,7 @@ public class MusicList extends CustomFragment implements OnClickListener
                 	Toast.makeText(getActivity(),"Sorry, please try another station..",Toast.LENGTH_LONG).show();
                 	try{
                 		player.stop();
-                		player.release();
+                		player.reset();
                 		isPlaying = false;
                 	} catch(Exception ex) {
                 	}
@@ -237,7 +241,7 @@ public class MusicList extends CustomFragment implements OnClickListener
 			@Override
 			public void onCompletion(MediaPlayer arg0) {
 				player.stop();
-				player.release();
+				player.reset();
 				String currURL = tRadio.randomSong(tRadio.tList);
 				System.out.println("next song selected: " + currURL);
 	    		tRadio(toPlay, currURL);
@@ -311,7 +315,7 @@ public class MusicList extends CustomFragment implements OnClickListener
     	if (player.isPlaying()) {
         	System.out.println("stopping now....");
         	player.stop();
-            player.release();
+            player.reset();
         }
 
         buttonPlay.setEnabled(true);

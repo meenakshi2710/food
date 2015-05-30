@@ -93,18 +93,19 @@ public final class R {
         public static final int img4=0x7f02002f;
         public static final int img5=0x7f020030;
         public static final int img6=0x7f020031;
-        public static final int loading=0x7f020032;
-        public static final int logo_login=0x7f020033;
-        public static final int playing=0x7f020034;
-        public static final int recipe1=0x7f020035;
-        public static final int recipe2=0x7f020036;
-        public static final int reg_bg=0x7f020037;
-        public static final int splash=0x7f020038;
-        public static final int tab_bg=0x7f020039;
-        public static final int tab_bg_sel=0x7f02003a;
-        public static final int textview_border=0x7f02003b;
-        public static final int user1=0x7f02003c;
-        public static final int user2=0x7f02003d;
+        public static final int like=0x7f020032;
+        public static final int loading=0x7f020033;
+        public static final int logo_login=0x7f020034;
+        public static final int playing=0x7f020035;
+        public static final int recipe1=0x7f020036;
+        public static final int recipe2=0x7f020037;
+        public static final int reg_bg=0x7f020038;
+        public static final int splash=0x7f020039;
+        public static final int tab_bg=0x7f02003a;
+        public static final int tab_bg_sel=0x7f02003b;
+        public static final int textview_border=0x7f02003c;
+        public static final int user1=0x7f02003d;
+        public static final int user2=0x7f02003e;
     }
     public static final class id {
         public static final int a=0x7f090019;
