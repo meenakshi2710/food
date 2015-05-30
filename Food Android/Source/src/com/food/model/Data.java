@@ -12,6 +12,8 @@ public class Data
 	/** The title1. */
 	private String name;
 
+	private int cId;
+	
 	/** The id. */
 	private String id;
 
@@ -67,6 +69,16 @@ public class Data
 		this.image1 = image1;
 		
 	}
+	
+	public Data(int cid, String id, String name, String desc, int image1)
+	{
+		this.cId = cid;
+		this.id = id;
+		this.name = name;
+		this.desc = desc;
+		this.image1 = image1;
+		
+	}
 
 	public Data(String id, String name, String desc, Bitmap image3)
 	{
@@ -97,6 +109,16 @@ public class Data
 		this.name = name;
 	}
 
+	public int getCid()
+	{
+		return cId;
+	}
+
+	public void setCid(int cid)
+	{
+		this.cId = cid;
+	}
+	
 	/**
 	 * Gets the id.
 	 * 
