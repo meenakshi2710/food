@@ -67,13 +67,15 @@ public class NewMusicList extends CustomFragment implements OnClickListener
     ProgressDialog mediaPlayerLoadingBar;
     Music[] oMusic;
     int i;
+    public String username;
     
-    public NewMusicList(Context context, MediaPlayer player, Music[] oMusic) {
+    public NewMusicList(Context context, MediaPlayer player, Music[] oMusic, String username) {
 		connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 		this.player = player;
 		this.context = context;
 		mediaPlayerLoadingBar = new ProgressDialog(this.context);
 		this.oMusic = oMusic;
+		this.username = username;
 	}
     
     @Override
@@ -162,6 +164,9 @@ public class NewMusicList extends CustomFragment implements OnClickListener
 		
 		int channelId = musicList.get(pos).getCid();
 		System.out.println("channelId to like: " + channelId);
+		
+		
+		
 		View v = list.getChildAt(pos);
 		TextView lbl = (TextView) v.findViewById(R.id.lbl2);
 		int like_count = Integer.parseInt(musicList.get(pos).getName()) + 1;
