@@ -3,17 +3,13 @@ package com.food;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.URI;
 import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -188,53 +184,3 @@ public class Register extends CustomActivity
     
     
 }
-/* 
- * 
-  //SignInActivity signin = new SignInActivity(this, 1, username, password);
-				   //status = signin.checkLogin();
-				   checkLogin();
-				   switch(signin_status)  {
-	        	   
-		        	   case 1: 
-		        		   // login user
-		                   startActivity(new Intent(this, MainActivity.class));
-		                   finish();
-		                   Toast.makeText(getApplicationContext(), "Welcome to Trystin", Toast.LENGTH_LONG).show();
-		                   break;
-		        	   case 2:
-		        		   if(name.trim().length() > 0 && email.trim().length() > 0) {
-		        			// sign up user
-		        			 signup();  
-		        			 switch(signup_status)  {
-		  	        	   
-				        	   case 1: 
-				        		   // login user
-			                       startActivity(new Intent(this, MainActivity.class));
-			                       finish();
-			                       Toast.makeText(getApplicationContext(), "Welcome to Trystin", Toast.LENGTH_LONG).show();
-			                       
-				        		   break;
-				        	   case 2:
-				        		   new AppAlerts().showErrorDialog(this, "SignUp Error..", "username already exists." );
-				        		   break;
-				        	   default:
-				        		   new AppAlerts().showErrorDialog(this, "SignUp Error..", "user already exists." );
-				        		   break;
-		        			 }
-		        		   } else {
-		        			   new AppAlerts().showErrorDialog(this, "SignUp Error..", "All fields are required!" );
-		        		   }
-		        		   break;
-	    	       }
-			   }
-			   else {
-				   new AppAlerts().showErrorDialog(this, "SignUp Error..", "Fields cannot be empty" );
-	         	}
-			   break;
-		   
-		   default:
-			   startActivity(new Intent(this, MainActivity.class));
-			   finish();
-			   break;
-		}
-		*/

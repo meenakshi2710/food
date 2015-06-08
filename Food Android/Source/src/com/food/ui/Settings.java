@@ -1,11 +1,7 @@
 package com.food.ui;
 
-import android.app.Fragment;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +13,6 @@ import com.food.Login;
 import com.food.MainActivity;
 import com.food.R;
 import com.food.custom.CustomFragment;
-import com.food.model.Music;
 
 /**
  * The main Search screen, launched when user click on Search button on Top

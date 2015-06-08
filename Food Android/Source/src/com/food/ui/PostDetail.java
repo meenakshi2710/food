@@ -19,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.food.MainActivity;
 import com.food.R;
 import com.food.custom.CustomFragment;
 import com.food.utils.JSONParser;

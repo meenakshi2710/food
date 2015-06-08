@@ -29,7 +29,6 @@ import com.food.Search;
 import com.food.custom.CustomFragment;
 import com.food.model.Data;
 import com.food.utils.JSONParser;
-import com.food.utils.RecipeUtil;
 
 /**
  * The Class CategoryList is the Fragment class that is launched when the user

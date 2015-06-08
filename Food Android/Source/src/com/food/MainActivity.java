@@ -42,7 +42,6 @@ import com.food.model.Music;
 import com.food.ui.CategoryList;
 import com.food.ui.ChatterList;
 import com.food.ui.LeftNavAdapter;
-import com.food.ui.MusicList;
 import com.food.ui.MyProfile;
 import com.food.ui.NewMusicList;
 import com.food.ui.RecipeList;

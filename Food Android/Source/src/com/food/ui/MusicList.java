@@ -34,7 +34,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.food.DetailActivity;
 import com.food.R;
 import com.food.Search;
 import com.food.custom.CustomFragment;
