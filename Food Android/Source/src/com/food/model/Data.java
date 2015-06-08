@@ -89,6 +89,16 @@ public class Data
 		this.image1 = image1;
 		
 	}
+	
+	public Data(int cid, String id, String name, String desc, Bitmap image3)
+	{
+		this.cId = cid;
+		this.id = id;
+		this.name = name;
+		this.desc = desc;
+		this.image3 = image3;
+		
+	}
 
 	public Data(String id, String name, String desc, Bitmap image3)
 	{

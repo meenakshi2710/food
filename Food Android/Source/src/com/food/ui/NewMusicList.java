@@ -11,6 +11,8 @@ import org.json.JSONObject;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
@@ -19,6 +21,7 @@ import android.net.NetworkInfo;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -40,8 +43,8 @@ import com.food.Search;
 import com.food.custom.CustomFragment;
 import com.food.model.Data;
 import com.food.model.Music;
+import com.food.utils.AppAlerts;
 import com.food.utils.JSONParser;
-import com.food.utils.RecipeUtil;
 import com.food.utils.TrystinMusic;
 /**
  * The Class MusicList is the Fragment class that is launched when the user
@@ -68,6 +71,7 @@ public class NewMusicList extends CustomFragment implements OnClickListener
     int i;
     public String username;
     int position, channelId;
+    public Bitmap myBitmap;
     
     public NewMusicList(Context context, MediaPlayer player, Music[] oMusic, String username) {
 		connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -114,7 +118,7 @@ public class NewMusicList extends CustomFragment implements OnClickListener
 		        buttonStopPlay.setEnabled(true);
 		        isPlaying = true;
 		        buttonPlay.setText("Playing " + musicList.get(toPlay).getId());
-	            Toast.makeText(getActivity(),"Playing - " + musicList.get(curPlaying).getId(),Toast.LENGTH_LONG).show();
+	            //Toast.makeText(getActivity(),"Playing - " + musicList.get(curPlaying).getId(),Toast.LENGTH_LONG).show();
 		    } 
      }
 
@@ -161,62 +165,66 @@ public class NewMusicList extends CustomFragment implements OnClickListener
     private void likeChannel(int pos) {
 		position = pos;
 		channelId = musicList.get(position).getCid();
-		//System.out.println("channelId to like: " + channelId);
-		AsyncTask<Void, Void, JSONObject> task = new AsyncTask<Void, Void, JSONObject>(){
-
-            @Override
-            protected void onPreExecute(){
-            	View v = list.getChildAt(position);
-        		ImageButton btnLike = (ImageButton) v.findViewById(R.id.btn_like);
-        		btnLike.setEnabled(false);
-            }
-
-            @Override
-            protected JSONObject doInBackground(Void... params) {
-            	JSONParser jParser = new JSONParser();
-            	JSONObject json = jParser.getJSONFromUrl("http://www.indiainme.com/api_likeChannel.php?channelId="+channelId+"&username="+username+"&like=true");
-			    try {
-		        	  JSONArray  status = json.getJSONArray("status");
-		        	    // looping through All Recipes
-		                JSONObject c = status.getJSONObject(0);
-                        return c;
-		                
-		            } catch (JSONException e) {
-		                e.printStackTrace();
-		            } 
-			    
-			    return null;
-            }
-
-            protected void onPostExecute(JSONObject result) {
-            	ImageButton btnLike = (ImageButton) v.findViewById(R.id.btn_like);
-        		btnLike.setEnabled(true);
-        		int value;
-				try {
-					value = result.getInt("value");
-					View v = list.getChildAt(position);
-	        		TextView lbl = (TextView) v.findViewById(R.id.lbl2);
-	                int like_count = Integer.parseInt(musicList.get(position).getName());
-	        		
-	        		switch(value){
-	                	case 0: like_count = like_count + 1;
-		        		        lbl.setText(like_count + " likes, you liked it.");
-		        		        break;
-	                	case 1: lbl.setText(like_count + " likes, you already like it.");
-	    		                break;
-	                }
-
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-              }
-            
-
-        };
-        
-        task.execute((Void[])null);
-
+		
+		if ( username != null){
+			//System.out.println("channelId to like: " + channelId);
+			AsyncTask<Void, Void, JSONObject> task = new AsyncTask<Void, Void, JSONObject>(){
+	
+	            @Override
+	            protected void onPreExecute(){
+	            	View v = list.getChildAt(position);
+	        		ImageButton btnLike = (ImageButton) v.findViewById(R.id.btn_like);
+	        		btnLike.setEnabled(false);
+	            }
+	
+	            @Override
+	            protected JSONObject doInBackground(Void... params) {
+	            	JSONParser jParser = new JSONParser();
+	            	JSONObject json = jParser.getJSONFromUrl("http://www.indiainme.com/api_likeChannel.php?channelId="+channelId+"&username="+username+"&like=true");
+				    try {
+			        	  JSONArray  status = json.getJSONArray("status");
+			        	    // looping through All Recipes
+			                JSONObject c = status.getJSONObject(0);
+	                        return c;
+			                
+			            } catch (JSONException e) {
+			                e.printStackTrace();
+			            } 
+				    
+				    return null;
+	            }
+	
+	            protected void onPostExecute(JSONObject result) {
+	            	ImageButton btnLike = (ImageButton) v.findViewById(R.id.btn_like);
+	        		btnLike.setEnabled(true);
+	        		int value;
+					try {
+						value = result.getInt("value");
+						View v = list.getChildAt(position);
+		        		TextView lbl = (TextView) v.findViewById(R.id.lbl2);
+		                int like_count = Integer.parseInt(musicList.get(position).getName());
+		        		
+		        		switch(value){
+		                	case 0: like_count = like_count + 1;
+			        		        lbl.setText(like_count + " likes, you liked it.");
+			        		        break;
+		                	case 1: lbl.setText(like_count + " likes, you already like it.");
+		    		                break;
+		                }
+	
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+	              }
+	            
+	
+	        };
+	        
+	        task.execute((Void[])null);
+		} else {
+			new AppAlerts().showErrorDialog(getActivity(), "Not Signed In..", "Please sign in to the app first." );
+		}
 		
 		
 		}
@@ -423,21 +431,27 @@ public class NewMusicList extends CustomFragment implements OnClickListener
 			        
 			        JSONParser jParser = new JSONParser();
 			        
-			        for (i=0; i<12; i++) {
-			    		
-			          // Getting JSON from URL
-			          JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getChannels.php");
+			        // Getting JSON from URL
+			        JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getChannels.php");
 			          try {
 			        	  JSONArray  channels = json.getJSONArray("channels");
-			        	    // looping through All Music channels
-			                JSONObject c = channels.getJSONObject(i);
-			                musicList.add(new Data(c.getInt("channelId"), c.getString("title"), c.getString("like_total"), c.getString("url"), R.drawable.cat1));
-			                 
+			        	  
+			        	  // looping through All Recipes
+			              for (int i = 0; i < channels.length(); i++) {
+			                    JSONObject c = channels.getJSONObject(i);
+			                    String img_src1 = "http://www.indiainme.com/img/channelImages/" + c.getString("image") + "." + c.getString("ext");
+			            		URL url = new URL(img_src1);
+								myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+								myBitmap = Bitmap.createScaledBitmap(myBitmap, 100, 75, true);
+			                    musicList.add(new Data(c.getInt("channelId"), c.getString("title"), c.getString("like_total"), c.getString("url"), myBitmap));
+			              }  
 			            } catch (JSONException e) {
 			                e.printStackTrace();
-			            }
-			        }
-					return null; 
+			            } catch (IOException e) {
+					        e.printStackTrace();
+					        Log.e("Exception",e.getMessage());
+					    }
+			       return null; 
 			        
 			        
 			    }
@@ -509,8 +523,8 @@ public class NewMusicList extends CustomFragment implements OnClickListener
 			lbl = (TextView) v.findViewById(R.id.lbl2);
 			lbl.setText(c.getName() + " likes");
 
-			ImageView img = (ImageView) v.findViewById(R.id.img1);
-			img.setImageResource(c.getImage1());
+			ImageView channelImg = (ImageView) v.findViewById(R.id.img1);
+			channelImg.setImageBitmap(c.getImage3());
 			
 			ImageButton btnLike = (ImageButton) v.findViewById(R.id.btn_like);
 			btnLike.setOnClickListener(new OnClickListener() 
