@@ -22,6 +22,7 @@ import android.widget.TextView;
 import com.food.MainActivity;
 import com.food.R;
 import com.food.custom.CustomFragment;
+import com.food.utils.AppAlerts;
 import com.food.utils.JSONParser;
 
 /**
@@ -67,48 +68,51 @@ public class MyProfile extends CustomFragment
 	}
 	private void loadProfile()
 	{
+		if ( username != null) {
 			
-		new AsyncTask<String, String, JSONObject>(){
-			
-		    ProgressDialog loadingBar;
-		     @Override
-            protected void onPreExecute(){
-            	loadingBar = ProgressDialog.show(getActivity(), "", "Loading..", true);
-			}
-			 
-			 @Override
-			    protected JSONObject doInBackground(String... args) {
-				    JSONParser jParser = new JSONParser();
-				    // Getting JSON from URL
-			        JSONObject json = jParser.getJSONFromUrl("http://www.indiainme.com/api_getUser.php?username="+username);
-			          try {
-			        	     JSONArray  dishArray = json.getJSONArray("user");
-			        	     user = dishArray.getJSONObject(0);
-			        	     profile_name = user.getString("name");
-			        	     
-			        	     String img_src1 = "http://www.indiainme.com/img/profile_image/" + user.getString("id_user") + "." + user.getString("ext");
-							 URL url = new URL(img_src1);
-						     myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-						     myBitmap = Bitmap.createScaledBitmap(myBitmap, 200, 200, true);
-			            } catch (JSONException e) {
-			                e.printStackTrace();
-			            } catch (IOException e) {
-					        e.printStackTrace();
-					        Log.e("Exception",e.getMessage());
-					        return null;
-					    }
-			        return user;
-			    }
-			 
-			 @Override
-		        protected void onPostExecute(JSONObject dish) {
-				   setHasOptionsMenu(true);
-				   image1.setImageBitmap(myBitmap); 
-				   name.setText(profile_name);
-				   loadingBar.dismiss();
+			new AsyncTask<String, String, JSONObject>(){
+				
+			    ProgressDialog loadingBar;
+			     @Override
+	            protected void onPreExecute(){
+	            	loadingBar = ProgressDialog.show(getActivity(), "", "Loading..", true);
 				}
-		}.execute();
-		
+				 
+				 @Override
+				    protected JSONObject doInBackground(String... args) {
+					    JSONParser jParser = new JSONParser();
+					    // Getting JSON from URL
+				        JSONObject json = jParser.getJSONFromUrl("http://www.indiainme.com/api_getUser.php?username="+username);
+				          try {
+				        	     JSONArray  dishArray = json.getJSONArray("user");
+				        	     user = dishArray.getJSONObject(0);
+				        	     profile_name = user.getString("name");
+				        	     
+				        	     String img_src1 = "http://www.indiainme.com/img/profile_image/" + user.getString("id_user") + "." + user.getString("ext");
+								 URL url = new URL(img_src1);
+							     myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+							     myBitmap = Bitmap.createScaledBitmap(myBitmap, 200, 200, true);
+				            } catch (JSONException e) {
+				                e.printStackTrace();
+				            } catch (IOException e) {
+						        e.printStackTrace();
+						        Log.e("Exception",e.getMessage());
+						        return null;
+						    }
+				        return user;
+				    }
+				 
+				 @Override
+			        protected void onPostExecute(JSONObject dish) {
+					   setHasOptionsMenu(true);
+					   image1.setImageBitmap(myBitmap); 
+					   name.setText(profile_name);
+					   loadingBar.dismiss();
+					}
+			}.execute();
+		} else {
+			new AppAlerts().showErrorDialog(getActivity(), "Not Signed In..", "Please sign in to the app first." );
+		}
 	}
 	
 	

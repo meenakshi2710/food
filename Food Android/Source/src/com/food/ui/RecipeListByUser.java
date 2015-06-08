@@ -43,6 +43,7 @@ import com.food.R;
 import com.food.Search;
 import com.food.custom.CustomFragment;
 import com.food.model.Data;
+import com.food.utils.AppAlerts;
 import com.food.utils.JSONParser;
 import com.food.utils.RecipeUtil;
 
@@ -90,77 +91,82 @@ public class RecipeListByUser extends CustomFragment
 	 */
 	private void loadRecipeList()
 	{
-		new AsyncTask<String, String, ArrayList<Data>>(){
-			
-		    ProgressDialog loadingBar;
-			 
-			 @Override
-            protected void onPreExecute(){
-            	loadingBar = ProgressDialog.show(getActivity(), "", "Loading your Recipes..", true);
-            	getActivity().getActionBar().setTitle("Recipes > By " + userName);
-            	recipeList = new ArrayList<Data>();
-			}
-			 
-			 @Override
-			    protected ArrayList<Data> doInBackground(String... args) {
-			        
-			        JSONParser jParser = new JSONParser();
-			        
-			        // Getting JSON from URL
-			        JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getDishesByUser.php?username="+userName);
-			          try {
-			        	  JSONArray  dishes = json.getJSONArray("dishes");
-			        	    // looping through All Recipes
-			                for (int i = 0; i < dishes.length(); i++) {
-			                    JSONObject c = dishes.getJSONObject(i);
-
-			                    String dishId = c.getString("dishId");
-			                    String dishName = c.getString("dishName");
-			                    String name = c.getString("name");
-			                    int categoryId = RecipeUtil.setCategoryImage(c.getInt("category"));
-			                    String img_src1 = "http://www.indiainme.com/" + c.getString("imagePrefix1") + "." + c.getString("extImage1");
-			            		URL url = new URL(img_src1);
-								myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-								myBitmap = Bitmap.createScaledBitmap(myBitmap, 125, 75, true);
+		if ( username != null){
+			new AsyncTask<String, String, ArrayList<Data>>(){
+				
+			    ProgressDialog loadingBar;
+				 
+				 @Override
+	            protected void onPreExecute(){
+	            	loadingBar = ProgressDialog.show(getActivity(), "", "Loading your Recipes..", true);
+	            	getActivity().getActionBar().setTitle("Recipes > By " + userName);
+	            	recipeList = new ArrayList<Data>();
+				}
+				 
+				 @Override
+				    protected ArrayList<Data> doInBackground(String... args) {
+				        
+				        JSONParser jParser = new JSONParser();
+				        
+				        // Getting JSON from URL
+				        JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getDishesByUser.php?username="+userName);
+				          try {
+				        	  JSONArray  dishes = json.getJSONArray("dishes");
+				        	    // looping through All Recipes
+				                for (int i = 0; i < dishes.length(); i++) {
+				                    JSONObject c = dishes.getJSONObject(i);
+	
+				                    String dishId = c.getString("dishId");
+				                    String dishName = c.getString("dishName");
+				                    String name = c.getString("name");
+				                    int categoryId = RecipeUtil.setCategoryImage(c.getInt("category"));
+				                    String img_src1 = "http://www.indiainme.com/" + c.getString("imagePrefix1") + "." + c.getString("extImage1");
+				            		URL url = new URL(img_src1);
+									myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+									myBitmap = Bitmap.createScaledBitmap(myBitmap, 125, 75, true);
+									
+									recipeList.add(new Data(dishId, dishName, "by " + name, categoryId));
+				                 }
+				            } catch (JSONException e) {
+				            	Toast.makeText(getActivity(), "No dishes found!", Toast.LENGTH_LONG).show();
+			                    e.printStackTrace();
+			                    return null;
+				            } catch (IOException e) {
+						        e.printStackTrace();
+						        Log.e("Exception",e.getMessage());
+						        return null;
+						    }
+				        
+				        return recipeList;
+				    }
+				 
+				 @Override
+			        protected void onPostExecute(ArrayList<Data> listt) {
+					   loadingBar.dismiss();
+					   ListView list = (ListView) v.findViewById(R.id.list);
+					   list.setAdapter(new RecipeAdapter());
+						list.setOnItemClickListener(new OnItemClickListener() {
+	
+							@Override
+							public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
+									long arg3)
+							{
+								Intent myIntent = new Intent(getActivity(), DetailActivity.class);
+								myIntent.putExtra("detail", true);
+								myIntent.putExtra("dishId", recipeList.get(pos).getId());
+								startActivity(myIntent);
 								
-								recipeList.add(new Data(dishId, dishName, "by " + name, categoryId));
-			                 }
-			            } catch (JSONException e) {
-			            	Toast.makeText(getActivity(), "No dishes found!", Toast.LENGTH_LONG).show();
-		                    e.printStackTrace();
-		                    return null;
-			            } catch (IOException e) {
-					        e.printStackTrace();
-					        Log.e("Exception",e.getMessage());
-					        return null;
-					    }
-			        
-			        return recipeList;
-			    }
-			 
-			 @Override
-		        protected void onPostExecute(ArrayList<Data> listt) {
-				   loadingBar.dismiss();
-				   ListView list = (ListView) v.findViewById(R.id.list);
-				   list.setAdapter(new RecipeAdapter());
-					list.setOnItemClickListener(new OnItemClickListener() {
-
-						@Override
-						public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
-								long arg3)
-						{
-							Intent myIntent = new Intent(getActivity(), DetailActivity.class);
-							myIntent.putExtra("detail", true);
-							myIntent.putExtra("dishId", recipeList.get(pos).getId());
-							startActivity(myIntent);
-							
-						}
-					});
-
-					setHasOptionsMenu(true);
-		        }
-			 
-		}.execute();
+							}
+						});
+	
+						setHasOptionsMenu(true);
+			        }
+				 
+			}.execute();
+			
+		} else {
+			new AppAlerts().showErrorDialog(getActivity(), "Not Signed In..", "Please sign in to the app first." );
+		}
 		
 	}
 	
