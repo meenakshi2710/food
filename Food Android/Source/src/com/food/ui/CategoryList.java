@@ -53,9 +53,17 @@ public class CategoryList extends CustomFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
-		v = inflater.inflate(R.layout.recipe_list, null);
-
-		loadCategoryList();
+		if (v == null) {
+			v = inflater.inflate(R.layout.recipe_list, null);
+		    loadCategoryList();
+		} else {
+            // Do not inflate the layout again.
+            // The returned View of onCreateView will be added into the fragment.
+            // However it is not allowed to be added twice even if the parent is same.
+            // So we must remove rootView from the existing parent view group
+            // (it will be added back).
+            ((ViewGroup)v.getParent()).removeView(v);
+        }
 		return v;
 	}
 

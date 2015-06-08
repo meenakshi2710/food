@@ -52,7 +52,6 @@ import com.food.utils.TrystinMusic;
  */
 public class NewMusicList extends CustomFragment implements OnClickListener
 {
-
 	private ConnectivityManager connMgr;
 	TrystinMusic tRadio = new TrystinMusic();
  	
@@ -97,11 +96,29 @@ public class NewMusicList extends CustomFragment implements OnClickListener
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
+		
+		/* Original code for fragment view - it loads the view each time
 		v = inflater.inflate(R.layout.music_list, null); 
     	initializeUIElements(v);
 		loadMusicList();
-		
 		return v;
+		*/
+		
+		if (v == null) {
+            // Inflate the layout for this fragment
+            v = inflater.inflate(R.layout.music_list, null);
+            initializeUIElements(v);
+            loadMusicList();
+        } else {
+            // Do not inflate the layout again.
+            // The returned View of onCreateView will be added into the fragment.
+            // However it is not allowed to be added twice even if the parent is same.
+            // So we must remove rootView from the existing parent view group
+            // (it will be added back).
+            ((ViewGroup)v.getParent()).removeView(v);
+        }
+		
+    return v;
 	}
 	
 	private void initializeUIElements(View v) {

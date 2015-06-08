@@ -38,7 +38,7 @@ public class MyProfile extends CustomFragment
 	public Bitmap myBitmap;
 	JSONObject user = new JSONObject();
 	ImageView image1;
-	
+	private View v;
 	public MyProfile(String username){
 		this.username = username;
 	}
@@ -50,10 +50,19 @@ public class MyProfile extends CustomFragment
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
-		View v = inflater.inflate(R.layout.my_profile, null);
-		initializeUIElements(v);
-		loadProfile();
 		
+		if ( v == null) {
+			v = inflater.inflate(R.layout.my_profile, null);
+		    initializeUIElements(v);
+		    loadProfile();
+		} else {
+            // Do not inflate the layout again.
+            // The returned View of onCreateView will be added into the fragment.
+            // However it is not allowed to be added twice even if the parent is same.
+            // So we must remove rootView from the existing parent view group
+            // (it will be added back).
+            ((ViewGroup)v.getParent()).removeView(v);
+        }
 		return v;
 	}
 	
