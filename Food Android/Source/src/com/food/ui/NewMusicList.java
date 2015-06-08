@@ -423,7 +423,7 @@ public class NewMusicList extends CustomFragment implements OnClickListener
 			        
 			        JSONParser jParser = new JSONParser();
 			        
-			        for (i=0; i<8; i++) {
+			        for (i=0; i<12; i++) {
 			    		
 			          // Getting JSON from URL
 			          JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getChannels.php");

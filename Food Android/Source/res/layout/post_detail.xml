@@ -71,122 +71,73 @@
 
         </HorizontalScrollView>
 
-        <GridLayout
-            android:layout_width="304dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/pad_10dp"
-            android:layout_marginRight="@dimen/pad_10dp"
-            android:alignmentMode="alignBounds"
-            android:useDefaultMargins="true" >
-
-            <Button
-                android:id="@+id/desc"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="98dp"
-                android:layout_height="34dp"
-                android:layout_gravity="left|center_vertical"
-                android:background="#fff"
-                android:text="@string/desc"
-                android:textAllCaps="false" />
-            
-			<View
-		        android:layout_marginTop="4dp"
-		        android:layout_marginRight="5dp"
-                android:layout_width="2dp"
-		        android:layout_height="25dp"
-		        android:background="@color/main_gray_dk" />
-			
-            <Button
-                android:id="@+id/proc"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="65dp"
-                android:layout_height="34dp"
-                android:layout_gravity="left|center_vertical"
-                android:background="#fff"
-                android:text="@string/proc" />
-
-            <View
-		        android:layout_marginTop="4dp"
-		        android:layout_marginLeft="5dp"
-		        android:layout_marginRight="5dp"
-                android:layout_width="2dp"
-		        android:layout_height="25dp"
-		        android:background="@color/main_gray_dk" />
-            
-            <Button
-                android:id="@+id/ingr"
-                style="?android:attr/buttonStyleSmall"
-                android:layout_width="95dp"
-                android:layout_height="34dp"
-                android:layout_gravity="center"
-                android:layout_weight="0.42"
-                android:text="@string/ingr"
-                android:background="#fff" />
-
-        </GridLayout>
-
         <LinearLayout
             android:id="@+id/layout_desc"
-            android:layout_width="match_parent"
-            android:layout_height="214dp"
+            android:layout_width="292dp"
+            android:layout_height="126dp"
             android:orientation="vertical" >
 
-		   <LinearLayout
-		    android:layout_width="wrap_content"
-		    android:layout_height="wrap_content"
-		    android:orientation="horizontal" 
-		    android:padding="@dimen/pad_10dp"
-		    android:gravity="center_vertical">
-		
-		    <ImageView
-		        android:id="@+id/user_profile"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-        		android:src="@drawable/user2" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="@dimen/pad_10dp" >
 
-		    <LinearLayout
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:layout_marginLeft="@dimen/pad_10dp"
-		        android:orientation="vertical" >
-		
-		        <TextView
-		            android:id="@+id/dishName"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:textColor="@color/main_gray_dk"
-		            android:textSize="@dimen/txt_14sp"
-		            android:textStyle="bold"/>
-		         <TextView
-		            android:id="@+id/userName"
-		            android:layout_width="wrap_content"
-		            android:layout_height="wrap_content"
-		            android:textColor="@color/main_gray_lt"
-		            android:textSize="@dimen/txt_12sp"
-		            />
-		         
-		         
-		
-		    </LinearLayout>
-		    
+                <ImageView
+                    android:id="@+id/user_profile"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/user2" />
 
-		</LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/pad_10dp"
+                    android:orientation="vertical" >
 
-	  <View
-	    android:id="@+id/view1"
-	    android:layout_width="match_parent"
-	    android:layout_height="@dimen/divider"
-	    android:background="@color/gray_light" />
-	
-	            <TextView
-	                android:id="@+id/description"
-	                android:layout_width="match_parent"
-	                android:layout_height="wrap_content"
-	                android:padding="@dimen/pad_10dp"
-	                android:textColor="@color/main_gray_dk"
-	                android:textSize="@dimen/txt_13sp" />
+                    <TextView
+                        android:id="@+id/dishName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_gray_dk"
+                        android:textSize="@dimen/txt_14sp"
+                        android:textStyle="bold" />
 
+                    <TextView
+                        android:id="@+id/userName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/main_gray_lt"
+                        android:textSize="@dimen/txt_12sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view1"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/divider"
+                android:background="@color/gray_light" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/pad_10dp"
+                android:textColor="@color/main_gray_dk"
+                android:textSize="@dimen/txt_13sp" />
         </LinearLayout>
+
+        <EditText
+            android:id="@+id/editText1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Comment..."
+            android:inputType="textMultiLine" >
+
+            <requestFocus />
+        </EditText>
 		    
     
     </LinearLayout>

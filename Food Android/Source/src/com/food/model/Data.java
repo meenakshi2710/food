@@ -70,6 +70,16 @@ public class Data
 		
 	}
 	
+	public Data(String id, String name, String desc, int image1, Bitmap image3)
+	{
+		this.id = id;
+		this.name = name;
+		this.desc = desc;
+		this.image1 = image1;
+		this.image3 = image3;
+		
+	}
+	
 	public Data(int cid, String id, String name, String desc, int image1)
 	{
 		this.cId = cid;

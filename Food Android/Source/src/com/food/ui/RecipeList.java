@@ -1,5 +1,7 @@
 package com.food.ui;
 
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -9,8 +11,10 @@ import org.json.JSONObject;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -99,11 +103,20 @@ public class RecipeList extends CustomFragment
 			                    String dishName = c.getString("dishName");
 			                    String name = c.getString("name");
 			                    int categoryId = RecipeUtil.setCategoryImage(c.getInt("category"));
-			                    recipeList.add(new Data(dishId, dishName, "by " + name, categoryId));
+			                    String img_src1 = "http://www.indiainme.com/" + c.getString("imagePrefix1") + "." + c.getString("extImage1");
+			            		URL url = new URL(img_src1);
+								myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+								myBitmap = Bitmap.createScaledBitmap(myBitmap, 125, 75, true);
+								
+			                    recipeList.add(new Data(dishId, dishName, "by " + name, categoryId, myBitmap));
 			                 }
 			            } catch (JSONException e) {
 			                e.printStackTrace();
-			            } 
+			            } catch (IOException e) {
+					        e.printStackTrace();
+					        Log.e("Exception",e.getMessage());
+					        return null;
+					    }
 			        
 			        return recipeList;
 			    }
@@ -188,8 +201,12 @@ public class RecipeList extends CustomFragment
 			lbl = (TextView) v.findViewById(R.id.user_name);
 			lbl.setText(c.getDesc());
 
-			ImageView img = (ImageView) v.findViewById(R.id.category);
-			img.setImageResource(c.getImage1());
+			ImageView categoryImg = (ImageView) v.findViewById(R.id.category);
+			categoryImg.setImageResource(c.getImage1());
+			
+			ImageView recipeImg = (ImageView) v.findViewById(R.id.img1);
+			recipeImg.setImageBitmap(c.getImage3());
+			
 			return v;
 		}
 

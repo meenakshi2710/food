@@ -118,13 +118,22 @@ public class RecipeListByCategory extends CustomFragment
 			                    String dishName = c.getString("dishName");
 			                    String name = c.getString("name");
 			                    int categoryId = RecipeUtil.setCategoryImage(c.getInt("category"));
-								recipeList.add(new Data(dishId, dishName, "by " + name, categoryId));
+			                    String img_src1 = "http://www.indiainme.com/" + c.getString("imagePrefix1") + "." + c.getString("extImage1");
+			            		URL url = new URL(img_src1);
+								myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+								myBitmap = Bitmap.createScaledBitmap(myBitmap, 125, 75, true);
+								
+			                    recipeList.add(new Data(dishId, dishName, "by " + name, categoryId));
 			                 }
 			            } catch (JSONException e) {
 			            	Toast.makeText(getActivity(), "No " + categoryName + " found! Please contribute here :)", Toast.LENGTH_LONG).show();
 		                    e.printStackTrace();
 		                    return null;
-			            } 
+			            } catch (IOException e) {
+					        e.printStackTrace();
+					        Log.e("Exception",e.getMessage());
+					        return null;
+					    }
 			        
 			        return recipeList;
 			    }
@@ -208,9 +217,12 @@ public class RecipeListByCategory extends CustomFragment
 			lbl = (TextView) v.findViewById(R.id.user_name);
 			lbl.setText(c.getDesc());
 
-			ImageView img = (ImageView) v.findViewById(R.id.category);
-			img.setImageResource(c.getImage1());
-			img.setImageBitmap(c.getImage3());
+			ImageView categoryImg = (ImageView) v.findViewById(R.id.category);
+			categoryImg.setImageResource(c.getImage1());
+
+			ImageView recipeImg = (ImageView) v.findViewById(R.id.img1);
+			recipeImg.setImageBitmap(c.getImage3());
+			
 			return v;
 		}
 
