@@ -16,7 +16,7 @@ import com.food.ui.RecipeListByCategory;
  */
 public class DetailActivity extends CustomActivity
 {
-
+	public String username;
 	/* (non-Javadoc)
 	 * @see com.food.custom.CustomActivity#onCreate(android.os.Bundle)
 	 */
@@ -25,7 +25,8 @@ public class DetailActivity extends CustomActivity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.detail_main);
-
+		username = getIntent().getStringExtra("username");
+		
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setTitle("Recipes");
 
@@ -42,7 +43,7 @@ public class DetailActivity extends CustomActivity
 		{
 			String dishId = getIntent().getStringExtra("dishId");
 			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.content_frame, new RecipeDetail(dishId)).commit();
+					.replace(R.id.content_frame, new RecipeDetail(dishId, username)).commit();
 		} else if(getIntent().hasExtra("category")){
 			String categoryName = getIntent().getStringExtra("categoryName");
 			int categoryId = getIntent().getIntExtra("categoryId", 0);
@@ -56,7 +57,7 @@ public class DetailActivity extends CustomActivity
 		else
 		{
 			getSupportFragmentManager().beginTransaction()
-					.replace(R.id.content_frame, new RecipeList()).commit();
+					.replace(R.id.content_frame, new RecipeList(username)).commit();
 		}
 	}
 

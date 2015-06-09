@@ -9,9 +9,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,6 +36,7 @@ import com.food.R;
 import com.food.Search;
 import com.food.custom.CustomFragment;
 import com.food.model.Data;
+import com.food.model.Music;
 import com.food.utils.JSONParser;
 import com.food.utils.RecipeUtil;
 
@@ -53,7 +57,10 @@ public class RecipeList extends CustomFragment
 	public Bitmap myBitmap;
 
 	private View v;
-    
+	
+	public RecipeList(String username) {
+		this.username = username;
+	}
 	
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
@@ -143,6 +150,7 @@ public class RecipeList extends CustomFragment
 							Intent myIntent = new Intent(getActivity(), DetailActivity.class);
 							myIntent.putExtra("detail", true);
 							myIntent.putExtra("dishId", recipeList.get(pos).getId());
+							myIntent.putExtra("username", username);
 							startActivity(myIntent);
 							
 						}

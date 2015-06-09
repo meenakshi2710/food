@@ -86,6 +86,7 @@ public class MainActivity extends CustomActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		username = getIntent().getStringExtra("USERNAME");
 		super.onCreate(savedInstanceState);
 	    setContentView(R.layout.activity_main);
 
@@ -93,7 +94,6 @@ public class MainActivity extends CustomActivity
 		setupDrawer();
 		setupMusicList();
 		
-		username = getIntent().getStringExtra("USERNAME");
 		
 	}
 	
@@ -266,9 +266,9 @@ public class MainActivity extends CustomActivity
 		   case 0:
 			     return new ChatterList();
 		   case 1:
-				 return new RecipeList();
+				 return new RecipeList(username);
 		   case 2:
-				 return new RecipeList();
+				 return new RecipeList(username);
 		   case 3:
 				 return new CategoryList();
 		   case 4:
@@ -276,15 +276,15 @@ public class MainActivity extends CustomActivity
 		   case 5:
 				 return new RecipeListByUser(username);
 		   case 6:
-				 return new RecipeList();
+				 return new RecipeList(username);
 		   case 7:
-				 return new RecipeList();
+				 return new RecipeList(username);
 		   case 8:
 				 return new Settings(this, player);
 		   case 9:
 				 return new NewMusicList(this, player, oMusic, username);
 		   default: 
-			    return new RecipeList();
+			    return new RecipeList(username);
 		}	
 	}
 

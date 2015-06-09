@@ -13,6 +13,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,12 +21,14 @@ import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.food.R;
 import com.food.custom.CustomFragment;
+import com.food.utils.AppAlerts;
 import com.food.utils.JSONParser;
 
 /**
@@ -38,15 +41,18 @@ public class RecipeDetail extends CustomFragment
     private String dishId;
     TextView rDishName, rUserName, rDescription;
     Button rDesc, rProc, rIngr; 
+    ImageButton rLike;
     LinearLayout recipe_desc;
     ImageView rUserImage, image1, image2, image3, image4, image5, image6;
     String img_src1 = null, img_src2 = null, img_src3 = null, img_src4 = null, img_src5 = null, img_src6 = null; 
     JSONObject dish = new JSONObject();
     JSONObject user = new JSONObject();
     public Bitmap myBitmap;
+    public String username;
     
-    public RecipeDetail(String dishId){
+    public RecipeDetail(String dishId, String username){
 		this.dishId = dishId;
+		this.username = username;
 	}
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
@@ -88,49 +94,115 @@ public class RecipeDetail extends CustomFragment
 		image6 = (ImageView) v.findViewById(R.id.image6);
 		
 		rDesc.setEnabled(false);
-		rDesc.setTextColor(getResources().getColor(R.color.gray_light));
+		rDesc.setTextColor(getResources().getColor(R.color.purple_highlight));
+		
+		rLike = (ImageButton) v.findViewById(R.id.btn_like);
+		rLike.setOnClickListener(this);
+		
 	}
 	
 	public void onClick(View v) {
-	   if (v == rDesc) {
-			rDesc.setEnabled(false);
-			rDesc.setTextColor(getResources().getColor(R.color.gray_light));
-			rProc.setEnabled(true);
-			rIngr.setEnabled(true);
-			rProc.setTextColor(getResources().getColor(R.color.black));
-			rIngr.setTextColor(getResources().getColor(R.color.black));
-			try {
-				reloadDescription();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		} else if (v == rProc) {
-        	rDesc.setEnabled(true);
-        	rDesc.setTextColor(getResources().getColor(R.color.black));
-        	rProc.setEnabled(false);
-        	rProc.setTextColor(getResources().getColor(R.color.gray_light));
-        	rIngr.setEnabled(true);
-        	rIngr.setTextColor(getResources().getColor(R.color.black));
-        	try {
-				loadRecipe();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-			}
-        } else{
-        	rDesc.setEnabled(true);
-        	rDesc.setTextColor(getResources().getColor(R.color.black));
-        	rProc.setEnabled(true);
-        	rProc.setTextColor(getResources().getColor(R.color.black));
-        	rIngr.setEnabled(false);
-        	rIngr.setTextColor(getResources().getColor(R.color.gray_light));
-        	try {
-				loadIngredients();
-			} catch (JSONException e) {
-				rDescription.setText("This information is not available.");
-		    }
+	   switch(v.getId()){
+		   
+		   case R.id.desc:
+				rDesc.setEnabled(false);
+				rDesc.setTextColor(getResources().getColor(R.color.purple_highlight));
+				rProc.setEnabled(true);
+				rIngr.setEnabled(true);
+				rProc.setTextColor(getResources().getColor(R.color.black));
+				rIngr.setTextColor(getResources().getColor(R.color.black));
+				try {
+					reloadDescription();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				break;
+			case R.id.proc:
+	        	rDesc.setEnabled(true);
+	        	rDesc.setTextColor(getResources().getColor(R.color.black));
+	        	rProc.setEnabled(false);
+	        	rProc.setTextColor(getResources().getColor(R.color.purple_highlight));
+	        	rIngr.setEnabled(true);
+	        	rIngr.setTextColor(getResources().getColor(R.color.black));
+	        	try {
+					loadRecipe();
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+				}
+	        	break;
+			case R.id.ingr:
+	        	rDesc.setEnabled(true);
+	        	rDesc.setTextColor(getResources().getColor(R.color.black));
+	        	rProc.setEnabled(true);
+	        	rProc.setTextColor(getResources().getColor(R.color.black));
+	        	rIngr.setEnabled(false);
+	        	rIngr.setTextColor(getResources().getColor(R.color.purple_highlight));
+	        	try {
+					loadIngredients();
+				} catch (JSONException e) {
+					rDescription.setText("This information is not available.");
+			    }
+	        	break;
+			case R.id.btn_like:
+	        	if (username != null) {
+	        		likeRecipe();
+	        	} else {
+	    			new AppAlerts().showErrorDialog(getActivity(), "Not Signed In..", "Please sign in to the app first." );
+	    		}
         }
     }
+	
+	public void likeRecipe(){
+		AsyncTask<Void, Void, JSONObject> task = new AsyncTask<Void, Void, JSONObject>(){
+			
+			            @Override
+			            protected void onPreExecute(){
+			            	
+			            }
+			
+			            @Override
+			            protected JSONObject doInBackground(Void... params) {
+			            	JSONParser jParser = new JSONParser();
+			            	JSONObject json = jParser.getJSONFromUrl("http://www.indiainme.com/api_likeDish.php?dishId="+dishId+"&username="+username+"&like=true");
+						    try {
+					        	  JSONArray  status = json.getJSONArray("status");
+					        	    // looping through Result
+					                JSONObject c = status.getJSONObject(0);
+			                        return c;
+					                
+					            } catch (JSONException e) {
+					                e.printStackTrace();
+					            } 
+						    
+						    return null;
+			            }
+			
+			            protected void onPostExecute(JSONObject result) {
+			            	//TODO change image to unlike
+			            	int value;
+							try {
+								value = result.getInt("value");
+								switch(value){
+				                	case 0: //TODO change image to unlike
+					        		        break;
+				                	case 1: //TODO inform user that he already likes it - although we should not encounter this scenario.
+				                		    //lbl.setText(like_count + " likes, you already like it.");
+				    		                break;
+				                }
+			
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+			              }
+			            
+			
+			        };
+			        
+			        task.execute((Void[])null);
+			
+	}
 	
 	private void loadDescription()
 	{
@@ -160,7 +232,7 @@ public class RecipeDetail extends CustomFragment
 					         URL url = new URL(img_src1);
 								
 			            	 myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-							 myBitmap = Bitmap.createScaledBitmap(myBitmap, 50, 50, true);		   
+							 myBitmap = Bitmap.createScaledBitmap(myBitmap, 75, 75, true);		   
 			            } catch (JSONException e) {
 			                e.printStackTrace();
 			            } catch (IOException e) {
@@ -176,6 +248,7 @@ public class RecipeDetail extends CustomFragment
 				   try {
 					rDishName.setText(dish.getString("dishName"));
 					rUserName.setText("by " + dish.getString("name"));
+					rDescription.setMovementMethod(new ScrollingMovementMethod());
 					rDescription.setText(dish.getString("shortDescription"));
 					rUserImage.setImageBitmap(myBitmap);
 					loadImages();

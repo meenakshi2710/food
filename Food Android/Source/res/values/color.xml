@@ -13,6 +13,6 @@
     <color name="gray_light">#DCD8D8</color>
     <color name="main_gray_dk">#8a7b7b</color>
     <color name="main_gray_lt">#b9abab</color>
-    
+    <color name="purple_highlight">#800080</color>
     
 </resources>
