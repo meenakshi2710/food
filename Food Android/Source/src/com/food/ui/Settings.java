@@ -1,13 +1,13 @@
 package com.food.ui;
 
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.food.Login;
 import com.food.MainActivity;
@@ -23,14 +23,14 @@ import com.food.custom.CustomFragment;
 public class Settings extends CustomFragment implements OnClickListener
 {
 
-	final String LOG_OUT = "event_logout";
+	final String LOG_OUT = "event_logout", username;
 	private Button btnLogout;
 	MainActivity activity;
-	private MediaPlayer player;
+	TextView userInfo;
 	
-	public Settings(MainActivity activity, MediaPlayer player) {
+	public Settings(MainActivity activity, String username) {
 		this.activity = activity;
-		this.player = player;
+		this.username = username;
 	}
 	/* (non-Javadoc)
 	 * @see com.food.custom.CustomActivity#onCreate(android.os.Bundle)
@@ -49,6 +49,9 @@ public class Settings extends CustomFragment implements OnClickListener
 		
 		btnLogout = (Button) v.findViewById(R.id.logout);
 		btnLogout.setOnClickListener(this);
+		
+		userInfo = (TextView) v.findViewById(R.id.user_info);
+		userInfo.setText("You are currently signed in as " + username);
 		
 		return v;
 	}	

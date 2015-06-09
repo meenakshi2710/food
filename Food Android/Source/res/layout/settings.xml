@@ -4,20 +4,30 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
+    <TextView
+        android:id="@+id/user_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/logout"
+        android:layout_below="@+id/user_info"
+        android:layout_marginTop="74dp"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    
     <Button
         android:id="@+id/logout"
         style="@style/btn"
         android:layout_width="152dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/divider"
-        android:layout_marginTop="@dimen/pad_10dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="70dp"
         android:background="@color/main_color_gray"
         android:drawableLeft="@drawable/ic_logout"
         android:drawablePadding="@dimen/pad_10dp"
-        android:layout_centerInParent="true"
         android:padding="@dimen/pad_10dp"
         android:text="@string/signout"
         android:textColor="@color/white"
         android:textSize="@dimen/txt_16sp" />
+    
 
 </RelativeLayout>

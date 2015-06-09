@@ -174,7 +174,7 @@
                     android:background="@drawable/heart"
                     android:scaleType="fitXY"
                     android:layout_marginRight="@dimen/pad_10dp"
-                    android:src="@drawable/like_button" />
+                    android:src="@drawable/like" />
                 
                  <ImageButton
                     android:id="@+id/btn_comment"
@@ -182,7 +182,7 @@
                     android:layout_height="52dp"
                     android:background="@drawable/heart"
                     android:scaleType="fitXY"
-                    android:src="@drawable/comment1" />
+                    android:src="@drawable/like" />
             </LinearLayout>
 
             <View

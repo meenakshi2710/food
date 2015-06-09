@@ -280,7 +280,7 @@ public class MainActivity extends CustomActivity
 		   case 7:
 				 return new RecipeList(username);
 		   case 8:
-				 return new Settings(this, player);
+				 return new Settings(this, username);
 		   case 9:
 				 return new NewMusicList(this, player, oMusic, username);
 		   default: 
