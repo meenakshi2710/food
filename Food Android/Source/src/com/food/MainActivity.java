@@ -39,6 +39,7 @@ import android.widget.Toast;
 import com.food.custom.CustomActivity;
 import com.food.model.Data;
 import com.food.model.Music;
+import com.food.ui.BookmarkList;
 import com.food.ui.CategoryList;
 import com.food.ui.ChatterList;
 import com.food.ui.LeftNavAdapter;
@@ -232,7 +233,7 @@ public class MainActivity extends CustomActivity
 			   return "Compose";
 		   case 2:
 			   setCurrTab(R.id.recipes);
-			   return "Recipes";
+			   return "Latest Recipes";
 		   case 3:
 			   enableAllTabs();
 			   return "Browse Categories";
@@ -278,7 +279,7 @@ public class MainActivity extends CustomActivity
 		   case 6:
 				 return new RecipeList(username);
 		   case 7:
-				 return new RecipeList(username);
+				 return new BookmarkList(username);
 		   case 8:
 				 return new Settings(this, username);
 		   case 9:

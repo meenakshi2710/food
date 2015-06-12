@@ -8,19 +8,18 @@
         android:id="@+id/user_info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/logout"
-        android:layout_below="@+id/user_info"
-        android:layout_marginTop="74dp"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
-    
+        android:textColor="@color/black"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp" />
+
     <Button
         android:id="@+id/logout"
         style="@style/btn"
         android:layout_width="152dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_below="@+id/user_info"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="70dp"
+        android:layout_marginTop="82dp"
         android:background="@color/main_color_gray"
         android:drawableLeft="@drawable/ic_logout"
         android:drawablePadding="@dimen/pad_10dp"
@@ -28,6 +27,15 @@
         android:text="@string/signout"
         android:textColor="@color/white"
         android:textSize="@dimen/txt_16sp" />
-    
+
+    <TextView
+        android:id="@+id/contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="45dp"
+        android:text="@string/contact"
+        android:textColor="@color/black" />
 
 </RelativeLayout>

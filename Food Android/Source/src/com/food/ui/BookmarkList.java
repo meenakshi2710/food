@@ -3,14 +3,18 @@ package com.food.ui;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,14 +30,13 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.food.DetailActivity;
 import com.food.R;
 import com.food.Search;
 import com.food.custom.CustomFragment;
 import com.food.model.Data;
-import com.food.utils.AppAlerts;
+import com.food.model.Music;
 import com.food.utils.JSONParser;
 import com.food.utils.RecipeUtil;
 
@@ -43,7 +46,7 @@ import com.food.utils.RecipeUtil;
  * Category from Category list. It simply display a dummy list of Recipes. You
  * need to write actual implementation for loading and displaying Recipes.
  */
-public class RecipeListByUser extends CustomFragment
+public class BookmarkList extends CustomFragment
 {
 
 	/** The Activity list. */
@@ -52,13 +55,13 @@ public class RecipeListByUser extends CustomFragment
 	public String username, profile_name;
 	TextView name;
 	public Bitmap myBitmap;
-	public int categoryId;
 
 	private View v;
-    
-	public RecipeListByUser(String userName){
-		this.username = userName;
+	
+	public BookmarkList(String username) {
+		this.username = username;
 	}
+	
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreateView(android.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 */
@@ -67,16 +70,16 @@ public class RecipeListByUser extends CustomFragment
 			Bundle savedInstanceState)
 	{
 		if (v == null) {
-		    v = inflater.inflate(R.layout.recipe_list, null);
-	        loadRecipeList();
+            v = inflater.inflate(R.layout.recipe_list, null);
+            loadBookmarkList();
 		} else {
-	        // Do not inflate the layout again.
-	        // The returned View of onCreateView will be added into the fragment.
-	        // However it is not allowed to be added twice even if the parent is same.
-	        // So we must remove rootView from the existing parent view group
-	        // (it will be added back).
-	        ((ViewGroup)v.getParent()).removeView(v);
-	    }
+            // Do not inflate the layout again.
+            // The returned View of onCreateView will be added into the fragment.
+            // However it is not allowed to be added twice even if the parent is same.
+            // So we must remove rootView from the existing parent view group
+            // (it will be added back).
+            ((ViewGroup)v.getParent()).removeView(v);
+        }
 		return v;
 	}
 
@@ -84,85 +87,79 @@ public class RecipeListByUser extends CustomFragment
 	 * This method currently loads a dummy list of Recipes. You can write the
 	 * actual implementation of loading Recipes.
 	 */
-	private void loadRecipeList()
+	private void loadBookmarkList()
 	{
-		System.out.println("username: " + username);
-		if ( username != null){
-			new AsyncTask<String, String, ArrayList<Data>>(){
-				
-			    ProgressDialog loadingBar;
-				 
-				 @Override
-	            protected void onPreExecute(){
-	            	loadingBar = ProgressDialog.show(getActivity(), "", "Loading your Recipes..", true);
-	            	getActivity().getActionBar().setTitle("Recipes > By " + username);
-	            	recipeList = new ArrayList<Data>();
-				}
-				 
-				 @Override
-				    protected ArrayList<Data> doInBackground(String... args) {
-				        
-				        JSONParser jParser = new JSONParser();
-				        
-				        // Getting JSON from URL
-				        JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getDishesByUser.php?username="+username);
-				          try {
-				        	  JSONArray  dishes = json.getJSONArray("dishes");
-				        	    // looping through All Recipes
-				                for (int i = 0; i < dishes.length(); i++) {
-				                    JSONObject c = dishes.getJSONObject(i);
-	
-				                    String dishId = c.getString("dishId");
-				                    String dishName = c.getString("dishName");
-				                    String name = c.getString("name");
-				                    int categoryId = RecipeUtil.setCategoryImage(c.getInt("category"));
-				                    String img_src1 = "http://www.indiainme.com/" + c.getString("imagePrefix1") + "." + c.getString("extImage1");
-				            		URL url = new URL(img_src1);
-									myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-									myBitmap = Bitmap.createScaledBitmap(myBitmap, 125, 75, true);
-									
-									recipeList.add(new Data(dishId, dishName, "by " + name, categoryId, myBitmap));
-				                 }
-				            } catch (JSONException e) {
-				            	Toast.makeText(getActivity(), "No dishes found!", Toast.LENGTH_LONG).show();
-			                    e.printStackTrace();
-			                    return null;
-				            } catch (IOException e) {
-						        e.printStackTrace();
-						        Log.e("Exception",e.getMessage());
-						        return null;
-						    }
-				        
-				        return recipeList;
-				    }
-				 
-				 @Override
-			        protected void onPostExecute(ArrayList<Data> listt) {
-					   loadingBar.dismiss();
-					   ListView list = (ListView) v.findViewById(R.id.list);
-					   list.setAdapter(new RecipeAdapter());
-						list.setOnItemClickListener(new OnItemClickListener() {
-	
-							@Override
-							public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
-									long arg3)
-							{
-								Intent myIntent = new Intent(getActivity(), DetailActivity.class);
-								myIntent.putExtra("detail", true);
-								myIntent.putExtra("dishId", recipeList.get(pos).getId());
-								startActivity(myIntent);
-								
-							}
-						});
-	
-						setHasOptionsMenu(true);
-			        }
-				 
-			}.execute();
+		
+		new AsyncTask<String, String, ArrayList<Data>>(){
 			
-		} else {
-			new AppAlerts().showErrorDialog(getActivity(), "Not Signed In..", "Please sign in to the app first." );
-		}
+		    ProgressDialog loadingBar;
+			 
+			 @Override
+            protected void onPreExecute(){
+            	loadingBar = ProgressDialog.show(getActivity(), "", "Loading...", true);
+            	recipeList = new ArrayList<Data>();
+			}
+			 
+			 @Override
+			    protected ArrayList<Data> doInBackground(String... args) {
+			        
+			        JSONParser jParser = new JSONParser();
+			        
+			        // Getting JSON from URL
+			        JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getBookmarks.php?username="+username);
+			          try {
+			        	  JSONArray  dishes = json.getJSONArray("dishes");
+			        	    // looping through All Recipes
+			                for (int i = 0; i < dishes.length(); i++) {
+			                    JSONObject c = dishes.getJSONObject(i);
+
+			                    String dishId = c.getString("dishId");
+			                    String dishName = c.getString("dishName");
+			                    String name = c.getString("name");
+			                    int categoryId = RecipeUtil.setCategoryImage(c.getInt("category"));
+			                    String img_src1 = "http://www.indiainme.com/" + c.getString("imagePrefix1") + "." + c.getString("extImage1");
+			            		URL url = new URL(img_src1);
+								myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+								myBitmap = Bitmap.createScaledBitmap(myBitmap, 125, 75, true);
+								
+			                    recipeList.add(new Data(dishId, dishName, "by " + name, categoryId, myBitmap));
+			                 }
+			            } catch (JSONException e) {
+			                e.printStackTrace();
+			            } catch (IOException e) {
+					        e.printStackTrace();
+					        Log.e("Exception",e.getMessage());
+					        return null;
+					    }
+			        
+			        return recipeList;
+			    }
+			 
+
+			@Override
+		        protected void onPostExecute(ArrayList<Data> listt) {
+				   loadingBar.dismiss();
+				   ListView list = (ListView) v.findViewById(R.id.list);
+				   list.setAdapter(new RecipeAdapter());
+				   list.setOnItemClickListener(new OnItemClickListener() {
+
+						@Override
+						public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
+								long arg3)
+						{
+							Intent myIntent = new Intent(getActivity(), DetailActivity.class);
+							myIntent.putExtra("detail", true);
+							myIntent.putExtra("dishId", recipeList.get(pos).getId());
+							myIntent.putExtra("username", username);
+							startActivity(myIntent);
+							
+						}
+					});
+
+					setHasOptionsMenu(true);
+		        }
+			 
+		}.execute();
 		
 	}
 	

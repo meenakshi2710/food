@@ -41,7 +41,7 @@ public class RecipeDetail extends CustomFragment
     private String dishId;
     TextView rDishName, rUserName, rDescription;
     Button rDesc, rProc, rIngr; 
-    ImageButton rLike;
+    ImageButton rLike, rBookmark;
     LinearLayout recipe_desc;
     ImageView rUserImage, image1, image2, image3, image4, image5, image6;
     String img_src1 = null, img_src2 = null, img_src3 = null, img_src4 = null, img_src5 = null, img_src6 = null; 
@@ -99,6 +99,9 @@ public class RecipeDetail extends CustomFragment
 		rLike = (ImageButton) v.findViewById(R.id.btn_like);
 		rLike.setOnClickListener(this);
 		
+		rBookmark = (ImageButton) v.findViewById(R.id.btn_bookmark);
+		rBookmark.setOnClickListener(this);
+		
 	}
 	
 	public void onClick(View v) {
@@ -150,63 +153,110 @@ public class RecipeDetail extends CustomFragment
 	        	} else {
 	    			new AppAlerts().showErrorDialog(getActivity(), "Not Signed In..", "Please sign in to the app first." );
 	    		}
+	        	break;
+			case R.id.btn_bookmark:
+				if (username != null) {
+	        		bookmarkRecipe();
+	        	} else {
+	    			new AppAlerts().showErrorDialog(getActivity(), "Not Signed In..", "Please sign in to the app first." );
+	    		}
+	        	break;
         }
     }
 	
 	public void likeRecipe(){
 		AsyncTask<Void, Void, JSONObject> task = new AsyncTask<Void, Void, JSONObject>(){
 			
-			            @Override
-			            protected void onPreExecute(){
-			            	
-			            }
+			  @Override
+			  protected void onPreExecute(){
+			  }
 			
-			            @Override
-			            protected JSONObject doInBackground(Void... params) {
-			            	JSONParser jParser = new JSONParser();
-			            	JSONObject json = jParser.getJSONFromUrl("http://www.indiainme.com/api_likeDish.php?dishId="+dishId+"&username="+username+"&like=true");
-						    try {
-					        	  JSONArray  status = json.getJSONArray("status");
-					        	    // looping through Result
-					                JSONObject c = status.getJSONObject(0);
-			                        return c;
+			  @Override
+			  protected JSONObject doInBackground(Void... params) {
+			      JSONParser jParser = new JSONParser();
+			      JSONObject json = jParser.getJSONFromUrl("http://www.indiainme.com/api_likeDish.php?dishId="+dishId+"&username="+username+"&like=true");
+				  try {
+					  JSONArray  status = json.getJSONArray("status");
+					  // looping through Result
+					  JSONObject c = status.getJSONObject(0);
+			          return c;
 					                
-					            } catch (JSONException e) {
-					                e.printStackTrace();
-					            } 
+				  } catch (JSONException e) {
+					  e.printStackTrace();
+				  } 
 						    
-						    return null;
-			            }
+				  return null;
+			  }
 			
-			            protected void onPostExecute(JSONObject result) {
-			            	//TODO change image to unlike
-			            	int value;
-							try {
-								value = result.getInt("value");
-								switch(value){
-				                	case 0: //TODO change image to unlike
-					        		        break;
-				                	case 1: //TODO inform user that he already likes it - although we should not encounter this scenario.
-				                		    //lbl.setText(like_count + " likes, you already like it.");
-				    		                break;
-				                }
+			  protected void onPostExecute(JSONObject result) {
+			      //TODO change image to unlike
+			      int value;
+				  try {
+					   value = result.getInt("value");
+					   switch(value){
+				             case 0: //TODO change image to unlike
+					        		 break;
+				             case 1: //TODO inform user that he already likes it - although we should not encounter this scenario.
+				                     //lbl.setText(like_count + " likes, you already like it.");
+				    		         break;
+				        }
 			
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-			              }
-			            
-			
-			        };
-			        
-			        task.execute((Void[])null);
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			  }
+		};
+	    task.execute((Void[])null);
 			
 	}
 	
-	private void loadDescription()
-	{
+	public void bookmarkRecipe(){
+		AsyncTask<Void, Void, JSONObject> task = new AsyncTask<Void, Void, JSONObject>(){
 			
+			@Override
+		    protected void onPreExecute(){
+			}
+			
+		    @Override
+			protected JSONObject doInBackground(Void... params) {
+			     JSONParser jParser = new JSONParser();
+			     JSONObject json = jParser.getJSONFromUrl("http://www.indiainme.com/api_Bookmark.php?type=0&id="+dishId+"&username="+username+"&bookmark=true");
+				 try {
+					  JSONArray  status = json.getJSONArray("status");
+					  // looping through Result
+					  JSONObject c = status.getJSONObject(0);
+			          return c;
+				} catch (JSONException e) {
+					  e.printStackTrace();
+				} 
+						    
+				return null;
+			}
+			
+			protected void onPostExecute(JSONObject result) {
+			     //TODO change image to unlike
+			     int value;
+				 try {
+					  value = result.getInt("value");
+					  switch(value){
+				           case 0: //TODO change image to unlike
+					        	   break;
+				           case 1: //TODO inform user that he already likes it - although we should not encounter this scenario.
+				                   //lbl.setText(like_count + " likes, you already like it.");
+				    		       break;
+				      }
+			     } catch (JSONException e) {
+					  // TODO Auto-generated catch block
+					  e.printStackTrace();
+				}
+		    }
+		};
+		task.execute((Void[])null);
+			
+	}
+	
+	private void loadDescription() {
 		new AsyncTask<String, String, JSONObject>(){
 			
 		    ProgressDialog loadingBar;
@@ -216,7 +266,7 @@ public class RecipeDetail extends CustomFragment
 			}
 			 
 			 @Override
-			    protected JSONObject doInBackground(String... args) {
+			protected JSONObject doInBackground(String... args) {
 				    JSONParser jParser = new JSONParser();
 				    // Getting JSON from URL
 			        JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getDish.php?dishId="+dishId);
@@ -243,15 +293,15 @@ public class RecipeDetail extends CustomFragment
 			    }
 			 
 			 @Override
-		        protected void onPostExecute(JSONObject dish) {
+		    protected void onPostExecute(JSONObject dish) {
 				   setHasOptionsMenu(true);
 				   try {
-					rDishName.setText(dish.getString("dishName"));
-					rUserName.setText("by " + dish.getString("name"));
-					rDescription.setMovementMethod(new ScrollingMovementMethod());
-					rDescription.setText(dish.getString("shortDescription"));
-					rUserImage.setImageBitmap(myBitmap);
-					loadImages();
+						rDishName.setText(dish.getString("dishName"));
+						rUserName.setText("by " + dish.getString("name"));
+						rDescription.setMovementMethod(new ScrollingMovementMethod());
+						rDescription.setText(dish.getString("shortDescription"));
+						rUserImage.setImageBitmap(myBitmap);
+						loadImages();
 					
 				   } catch (JSONException e) {
 					   // TODO Auto-generated catch block
@@ -263,16 +313,13 @@ public class RecipeDetail extends CustomFragment
 		
 	}
 	
-	private void reloadDescription() throws JSONException
-	{
+	private void reloadDescription() throws JSONException {
 		rDescription.setText(dish.getString("shortDescription"));
 	}
-	private void loadRecipe() throws JSONException
-	{
+	private void loadRecipe() throws JSONException {
 		rDescription.setText(dish.getString("recipe"));
 	}
-	private void loadIngredients() throws JSONException
-	{
+	private void loadIngredients() throws JSONException {
 		rDescription.setText(dish.getString("ingredients"));
 	}
 	

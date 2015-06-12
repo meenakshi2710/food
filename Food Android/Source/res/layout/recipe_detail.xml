@@ -166,23 +166,6 @@
                         android:textColor="@color/main_gray_lt"
                         android:textSize="@dimen/txt_12sp" />
                 </LinearLayout>
-
-                <ImageButton
-                    android:id="@+id/btn_like"
-                    android:layout_width="48dp"
-                    android:layout_height="52dp"
-                    android:background="@drawable/heart"
-                    android:scaleType="fitXY"
-                    android:layout_marginRight="@dimen/pad_10dp"
-                    android:src="@drawable/like" />
-                
-                 <ImageButton
-                    android:id="@+id/btn_comment"
-                    android:layout_width="48dp"
-                    android:layout_height="52dp"
-                    android:background="@drawable/heart"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/like" />
             </LinearLayout>
 
             <View
@@ -203,7 +186,34 @@
                 android:textSize="@dimen/txt_13sp" />
 
         </LinearLayout>
-    
+        <LinearLayout
+	        android:orientation="horizontal"
+	        android:layout_width="fill_parent"
+	        android:layout_height="180dp">
+
+            <ImageButton
+                android:id="@+id/btn_like"
+                android:layout_width="48dp"
+                android:layout_height="52dp"
+                android:layout_marginRight="@dimen/pad_10dp"
+                android:background="@drawable/like_button"
+                android:scaleType="fitXY" />
+
+            <ImageButton
+                android:id="@+id/btn_bookmark"
+                android:layout_width="48dp"
+                android:layout_height="52dp"
+                android:background="@drawable/bookmark"
+                android:scaleType="fitXY" />
+
+	        <ImageButton
+	            android:id="@+id/btn_comment"
+	            android:layout_width="48dp"
+	            android:layout_height="52dp"
+	            android:layout_marginRight="@dimen/pad_10dp"
+	            android:background="@drawable/comment1"
+	            android:scaleType="fitXY" />
+         </LinearLayout>
     </LinearLayout>
 
 </ScrollView>

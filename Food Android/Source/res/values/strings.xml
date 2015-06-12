@@ -40,6 +40,7 @@
 	<string name="radio_teentaal">Radio Teentaal</string>
 	<string name="edit_icon">Edit icon</string>
 	<string name="img_border">Image Border</string>
+	<string name="contact">Having problems? <a href="https://www.google.com" >Contact Us</a></string>
 	
 	<string name="food_detail_txt">Most food has its origin in plants. Some food is obtained directly from plants . Maize, wheat, and rice – in all of their varieties – account for 87% of all grain production worldwide.[2] Most of the grain that is produced worldwide is fed to livestock.\n\nSome foods not from animal or plant sources include various edible fungi, especially mushrooms. Fungi and ambient bacteria are used in the preparation of fermented.</string>
 </resources>

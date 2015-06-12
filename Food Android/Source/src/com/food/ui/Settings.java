@@ -50,9 +50,11 @@ public class Settings extends CustomFragment implements OnClickListener
 		btnLogout = (Button) v.findViewById(R.id.logout);
 		btnLogout.setOnClickListener(this);
 		
-		userInfo = (TextView) v.findViewById(R.id.user_info);
-		userInfo.setText("You are currently signed in as " + username);
-		
+		if (username != null) {
+			userInfo = (TextView) v.findViewById(R.id.user_info);
+			userInfo.setText("You are currently signed in as " + username);
+		}
+			
 		return v;
 	}	
 	@Override
