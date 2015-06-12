@@ -120,7 +120,7 @@ public class RecipeListByCategory extends CustomFragment
 								myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
 								myBitmap = Bitmap.createScaledBitmap(myBitmap, 125, 75, true);
 								
-			                    recipeList.add(new Data(dishId, dishName, "by " + name, categoryId));
+			                    recipeList.add(new Data(dishId, dishName, "by " + name, categoryId, myBitmap));
 			                 }
 			            } catch (JSONException e) {
 			            	Toast.makeText(getActivity(), "No " + categoryName + " found! Please contribute here :)", Toast.LENGTH_LONG).show();
