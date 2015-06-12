@@ -86,7 +86,6 @@ public class RecipeListByUser extends CustomFragment
 	 */
 	private void loadRecipeList()
 	{
-		System.out.println("username: " + username);
 		if ( username != null){
 			new AsyncTask<String, String, ArrayList<Data>>(){
 				

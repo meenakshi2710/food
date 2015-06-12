@@ -141,8 +141,7 @@
                 <ImageView
                     android:id="@+id/user_profile"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/user2" />
+                    android:layout_height="wrap_content" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -177,19 +176,20 @@
             <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="154dp"
+                android:fadeScrollbars="false"
                 android:maxLines="15"
                 android:padding="@dimen/pad_10dp"
                 android:scrollbars="vertical"
-                android:fadeScrollbars="false"
                 android:textColor="@color/main_gray_dk"
                 android:textSize="@dimen/txt_13sp" />
 
         </LinearLayout>
+
         <LinearLayout
-	        android:orientation="horizontal"
-	        android:layout_width="fill_parent"
-	        android:layout_height="180dp">
+            android:layout_width="fill_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal" >
 
             <ImageButton
                 android:id="@+id/btn_like"
@@ -203,16 +203,17 @@
                 android:id="@+id/btn_bookmark"
                 android:layout_width="48dp"
                 android:layout_height="52dp"
+                android:layout_marginLeft="@dimen/pad_10dp"
                 android:background="@drawable/bookmark"
                 android:scaleType="fitXY" />
 
-	        <ImageButton
+	      <!--  <ImageButton
 	            android:id="@+id/btn_comment"
 	            android:layout_width="48dp"
 	            android:layout_height="52dp"
 	            android:layout_marginRight="@dimen/pad_10dp"
 	            android:background="@drawable/comment1"
-	            android:scaleType="fitXY" />
+	            android:scaleType="fitXY" /> -->
          </LinearLayout>
     </LinearLayout>
 

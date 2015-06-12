@@ -155,6 +155,7 @@ public class RecipeDetail extends CustomFragment
 	    		}
 	        	break;
 			case R.id.btn_bookmark:
+				System.out.println("username:" + username);
 				if (username != null) {
 	        		bookmarkRecipe();
 	        	} else {
@@ -241,9 +242,17 @@ public class RecipeDetail extends CustomFragment
 					  value = result.getInt("value");
 					  switch(value){
 				           case 0: //TODO change image to unlike
+				        	       //System.out.println("Bookmarked");
+				        	       //MainActivity a = (MainActivity) getActivity();
+				        	       //a.fragments[7] = null;
+				        	   
 					        	   break;
-				           case 1: //TODO inform user that he already likes it - although we should not encounter this scenario.
+				           case 1: //System.out.println("Bookmarked");
+				        	       //TODO inform user that he already likes it - although we should not encounter this scenario.
 				                   //lbl.setText(like_count + " likes, you already like it.");
+				    		       break;
+				    	   default:
+				    		       // System.out.println("something went wrong");
 				    		       break;
 				      }
 			     } catch (JSONException e) {
@@ -282,7 +291,7 @@ public class RecipeDetail extends CustomFragment
 					         URL url = new URL(img_src1);
 								
 			            	 myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-							 myBitmap = Bitmap.createScaledBitmap(myBitmap, 75, 75, true);		   
+							 myBitmap = Bitmap.createScaledBitmap(myBitmap, 100, 75, true);		   
 			            } catch (JSONException e) {
 			                e.printStackTrace();
 			            } catch (IOException e) {
