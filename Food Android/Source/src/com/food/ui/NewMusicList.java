@@ -61,7 +61,7 @@ public class NewMusicList extends CustomFragment implements OnClickListener
     private Button buttonStopPlay;
     private MediaPlayer player;
     private boolean isPlaying = false;
-    View v;
+    View v, likeView;
     int curPlaying, toPlay;
     ListView list =  null;
     Context context;
@@ -96,14 +96,6 @@ public class NewMusicList extends CustomFragment implements OnClickListener
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState)
 	{
-		
-		/* Original code for fragment view - it loads the view each time
-		v = inflater.inflate(R.layout.music_list, null); 
-    	initializeUIElements(v);
-		loadMusicList();
-		return v;
-		*/
-		
 		if (v == null) {
             // Inflate the layout for this fragment
             v = inflater.inflate(R.layout.music_list, null);
@@ -179,18 +171,19 @@ public class NewMusicList extends CustomFragment implements OnClickListener
 		
 	}
 	
-    private void likeChannel(int pos) {
-		position = pos;
+    private void likeChannel(View v, int pos) {
+    	likeView = v;
+    	position = pos;
 		channelId = musicList.get(position).getCid();
-		
+		System.out.println("liking id: " + channelId);
 		if ( username != null){
 			//System.out.println("channelId to like: " + channelId);
 			AsyncTask<Void, Void, JSONObject> task = new AsyncTask<Void, Void, JSONObject>(){
 	
 	            @Override
 	            protected void onPreExecute(){
-	            	View v = list.getChildAt(position);
-	        		ImageButton btnLike = (ImageButton) v.findViewById(R.id.btn_like);
+	            	//View v = list.getChildAt(position);
+	        		ImageButton btnLike = (ImageButton) likeView.findViewById(R.id.btn_like);
 	        		btnLike.setEnabled(false);
 	            }
 	
@@ -212,13 +205,13 @@ public class NewMusicList extends CustomFragment implements OnClickListener
 	            }
 	
 	            protected void onPostExecute(JSONObject result) {
-	            	ImageButton btnLike = (ImageButton) v.findViewById(R.id.btn_like);
-	        		btnLike.setEnabled(true);
+	            	//ImageButton btnLike = (ImageButton) likeView.findViewById(R.id.btn_like);
+	        		//btnLike.setEnabled(true);
 	        		int value;
 					try {
 						value = result.getInt("value");
-						View v = list.getChildAt(position);
-		        		TextView lbl = (TextView) v.findViewById(R.id.lbl2);
+						View parentRow = (View) likeView.getParent();
+						TextView lbl = (TextView) parentRow.findViewById(R.id.lbl2);
 		                int like_count = Integer.parseInt(musicList.get(position).getName());
 		        		
 		        		switch(value){
@@ -552,7 +545,7 @@ public class NewMusicList extends CustomFragment implements OnClickListener
 			    	   View parentRow = (View) v.getParent();
 			    	   ListView listView = (ListView) parentRow.getParent();
 			    	   final int position = listView.getPositionForView(parentRow);
-			    	   likeChannel(position);
+			    	   likeChannel(v, position);
 			       }
 
 			   });
