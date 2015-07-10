@@ -189,8 +189,7 @@
             <TextView
                 android:id="@+id/description"
                 android:layout_width="match_parent"
-                android:layout_height="154dp"
-                android:layout_weight="22.20"
+                android:layout_height="302dp"
                 android:fadeScrollbars="false"
                 android:maxLines="15"
                 android:padding="@dimen/pad_10dp"
