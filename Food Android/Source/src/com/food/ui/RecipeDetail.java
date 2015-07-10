@@ -40,13 +40,15 @@ public class RecipeDetail extends CustomFragment
 {
     private String dishId;
     TextView rDishName, rUserName, rDescription;
-    Button rDesc, rProc, rIngr; 
-    ImageButton rLike, rBookmark;
+    Button rDesc, rProc, rIngr, rLike; 
+    ImageButton  rBookmark;
     LinearLayout recipe_desc;
     ImageView rUserImage, image1, image2, image3, image4, image5, image6;
     String img_src1 = null, img_src2 = null, img_src3 = null, img_src4 = null, img_src5 = null, img_src6 = null; 
+    Boolean isLiked;
     JSONObject dish = new JSONObject();
     JSONObject user = new JSONObject();
+    JSONObject status = new JSONObject();
     public Bitmap myBitmap;
     public String username;
     
@@ -96,7 +98,7 @@ public class RecipeDetail extends CustomFragment
 		rDesc.setEnabled(false);
 		rDesc.setTextColor(getResources().getColor(R.color.purple_highlight));
 		
-		rLike = (ImageButton) v.findViewById(R.id.btn_like);
+		rLike = (Button) v.findViewById(R.id.btn_like);
 		rLike.setOnClickListener(this);
 		
 		rBookmark = (ImageButton) v.findViewById(R.id.btn_bookmark);
@@ -149,13 +151,18 @@ public class RecipeDetail extends CustomFragment
 	        	break;
 			case R.id.btn_like:
 	        	if (username != null) {
-	        		likeRecipe();
+	        		if (!isLiked) {
+	        			System.out.println("Liking recipe");
+	        			likeRecipe();
+	        		} else {
+	        			System.out.println("Unliking recipe");
+	        			unlikeRecipe();
+	        		}
 	        	} else {
 	    			new AppAlerts().showErrorDialog(getActivity(), "Not Signed In..", "Please sign in to the app first." );
 	    		}
 	        	break;
 			case R.id.btn_bookmark:
-				System.out.println("username:" + username);
 				if (username != null) {
 	        		bookmarkRecipe();
 	        	} else {
@@ -190,16 +197,62 @@ public class RecipeDetail extends CustomFragment
 			  }
 			
 			  protected void onPostExecute(JSONObject result) {
-			      //TODO change image to unlike
 			      int value;
 				  try {
 					   value = result.getInt("value");
 					   switch(value){
-				             case 0: //TODO change image to unlike
+				             case 0: // change image to unlike
+				            	     isLiked = true;
+				            	     rLike.setBackgroundResource(R.drawable.btn_unlike); 
 					        		 break;
 				             case 1: //TODO inform user that he already likes it - although we should not encounter this scenario.
 				                     //lbl.setText(like_count + " likes, you already like it.");
 				    		         break;
+				        }
+			
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+			  }
+		};
+	    task.execute((Void[])null);
+			
+	}
+	
+	public void unlikeRecipe(){
+		AsyncTask<Void, Void, JSONObject> task = new AsyncTask<Void, Void, JSONObject>(){
+			
+			  @Override
+			  protected void onPreExecute(){
+			  }
+			
+			  @Override
+			  protected JSONObject doInBackground(Void... params) {
+			      JSONParser jParser = new JSONParser();
+			      JSONObject json = jParser.getJSONFromUrl("http://www.indiainme.com/api_likeDish.php?dishId="+dishId+"&username="+username+"&like=false");
+				  try {
+					  JSONArray  status = json.getJSONArray("status");
+					  // looping through Result
+					  JSONObject c = status.getJSONObject(0);
+			          return c;
+					                
+				  } catch (JSONException e) {
+					  e.printStackTrace();
+				  } 
+						    
+				  return null;
+			  }
+			
+			  protected void onPostExecute(JSONObject result) {
+			      int value;
+				  try {
+					   value = result.getInt("value");
+					   switch(value){
+				             case 2: // change image to like
+				            	     isLiked = false;
+				            	     rLike.setBackgroundResource(R.drawable.btn_like); 
+					        		 break;
 				        }
 			
 					} catch (JSONException e) {
@@ -278,11 +331,14 @@ public class RecipeDetail extends CustomFragment
 			protected JSONObject doInBackground(String... args) {
 				    JSONParser jParser = new JSONParser();
 				    // Getting JSON from URL
-			        JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getDish.php?dishId="+dishId);
+			        JSONObject json = jParser.getJSONFromUrl("http://indiainme.com/api_getDish.php?dishId="+dishId+"&username="+username);
 			          try {
 			        	     JSONArray  dishArray = json.getJSONArray("dish");
 			        	     dish = dishArray.getJSONObject(0);
 			        	     String username = dish.getString("username");
+			        	     
+			        	     JSONArray  statusArray = json.getJSONArray("status");
+			        	     status = statusArray.getJSONObject(0);
 			                    
 			        	     JSONObject user_json = jParser.getJSONFromUrl("http://www.indiainme.com/api_getUser.php?username="+username);
 		                     JSONArray  userArray = user_json.getJSONArray("user");
@@ -291,7 +347,8 @@ public class RecipeDetail extends CustomFragment
 					         URL url = new URL(img_src1);
 								
 			            	 myBitmap = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-							 myBitmap = Bitmap.createScaledBitmap(myBitmap, 100, 75, true);		   
+							 myBitmap = Bitmap.createScaledBitmap(myBitmap, 100, 75, true);	
+			        	     
 			            } catch (JSONException e) {
 			                e.printStackTrace();
 			            } catch (IOException e) {
@@ -311,6 +368,20 @@ public class RecipeDetail extends CustomFragment
 						rDescription.setText(dish.getString("shortDescription"));
 						rUserImage.setImageBitmap(myBitmap);
 						loadImages();
+						switch(status.getInt("liked")){
+						case -1:
+							//rLike.setText("Like");
+							rLike.setBackgroundResource(R.drawable.btn_like);
+							isLiked = false;
+						case 0:
+							rLike.setBackgroundResource(R.drawable.btn_like);
+							isLiked = false;
+						case 1:
+							//rLike.setText("Liked");
+							rLike.setBackgroundResource(R.drawable.btn_unlike);
+							isLiked = true;
+						} 
+						
 					
 				   } catch (JSONException e) {
 					   // TODO Auto-generated catch block

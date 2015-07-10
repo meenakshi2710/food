@@ -174,13 +174,13 @@ public class MainActivity extends CustomActivity
 
 		ArrayList<Data> al = new ArrayList<Data>();
 		al.add(new Data("Home", R.drawable.ic_nav1, R.drawable.ic_nav1_sel));
-		al.add(new Data("Compose", R.drawable.ic_nav2, R.drawable.ic_nav2_sel));
-		al.add(new Data("Recipes", R.drawable.ic_nav3, R.drawable.ic_nav3_sel));
-		al.add(new Data("Browse Categories", R.drawable.ic_nav4, R.drawable.ic_nav4_sel));
+		al.add(new Data("What's New?", R.drawable.ic_nav2, R.drawable.ic_nav2_sel));
+		//al.add(new Data("Recipes", R.drawable.ic_nav3, R.drawable.ic_nav3_sel));
+		al.add(new Data("Food Categories", R.drawable.ic_nav4, R.drawable.ic_nav4_sel));
 		al.add(new Data("My Profile", R.drawable.ic_nav5, R.drawable.ic_nav5_sel));
-		al.add(new Data("My Recipes", R.drawable.ic_nav5, R.drawable.ic_nav5_sel));
-		al.add(new Data("My Favorites", R.drawable.ic_nav5, R.drawable.ic_nav5_sel));
-		al.add(new Data("Bookmarks", R.drawable.ic_nav5, R.drawable.ic_nav5_sel));
+		al.add(new Data("My Recipes", R.drawable.ic_nav3, R.drawable.ic_nav3_sel));
+		al.add(new Data("My Favorites", R.drawable.ic_nav_like, R.drawable.ic_nav_like));
+		al.add(new Data("My Bookmarks", R.drawable.ic_nav_bookmark, R.drawable.ic_nav_bookmark));
 		al.add(new Data("Settings", R.drawable.ic_nav6, R.drawable.ic_nav6_sel));
 		return al;
 	}
@@ -226,38 +226,39 @@ public class MainActivity extends CustomActivity
 	private String setTitleFragment(int pos) {
 		switch(pos) {
 		   case 0:
-			   enableAllTabs();
+			   //enableAllTabs();
+			   setCurrTab(R.id.chatter);
 			   return "New Posts";
 		   case 1:
 			   enableAllTabs();
-			   return "Compose";
+			   return "What's new";
+		   //case 2:
+		   //	   setCurrTab(R.id.recipes);
+		   //	   return "Latest Recipes";
 		   case 2:
-			   setCurrTab(R.id.recipes);
-			   return "Latest Recipes";
+			   enableAllTabs();
+			   return "Categories";
 		   case 3:
 			   enableAllTabs();
-			   return "Browse Categories";
+			   return "Profile";
 		   case 4:
 			   enableAllTabs();
-			   return "Profile";
+			   return "My Recipes";
 		   case 5:
 			   enableAllTabs();
-			   return "My Recipes";
+			   return "My Favorites";
 		   case 6:
 			   enableAllTabs();
-			   return "My Favorites";
+			   return "Bookmarks";
 		   case 7:
 			   enableAllTabs();
-			   return "Bookmarks";
-		   case 8:
-			   enableAllTabs();
 			   return "Settings";
-		   case 9:
+		   case 8:
 			   setCurrTab(R.id.music);
 			   return "Music";
 		   default: 
 			   enableAllTabs();
-			   return "Home";
+			   return "Latest Recipes";
 		}
 	}
 	
@@ -268,21 +269,21 @@ public class MainActivity extends CustomActivity
 			     return new ChatterList();
 		   case 1:
 				 return new RecipeList(username);
+		   //case 2:
+		   //		 return new RecipeList(username);
 		   case 2:
-				 return new RecipeList(username);
-		   case 3:
 				 return new CategoryList();
-		   case 4:
+		   case 3:
 				 return new MyProfile(username);
-		   case 5:
+		   case 4:
 				 return new RecipeListByUser(username);
-		   case 6:
+		   case 5:
 				 return new RecipeList(username);
-		   case 7:
+		   case 6:
 				 return new BookmarkList(username);
-		   case 8:
+		   case 7:
 				 return new Settings(this, username);
-		   case 9:
+		   case 8:
 				 return new NewMusicList(this, player, oMusic, username);
 		   default: 
 			    return new RecipeList(username);
@@ -306,7 +307,8 @@ public class MainActivity extends CustomActivity
 						setActionBarTitle();
 					}
 				});
-		launchFragment(2);
+		launchFragment(9);
+		setCurrTab(R.id.recipes);
 	}
 	public void enableAllTabs(){
 		findViewById(R.id.music).setEnabled(true);
@@ -407,11 +409,11 @@ public class MainActivity extends CustomActivity
 		     break;
 		   case R.id.recipes:
 			 System.out.println("tapped on recipes from tab");  
-			 launchFragment(2);
+			 launchFragment(9);
 			 setCurrTab(R.id.recipes); 
 			 break;
 		   case R.id.music:
-			 launchFragment(9);
+			 launchFragment(8);
 			 setCurrTab(R.id.music); 
 	   	     break;
 	   	   default:

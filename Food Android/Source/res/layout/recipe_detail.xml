@@ -168,17 +168,16 @@
 
                 <Button
                     android:id="@+id/btn_like"
-                    android:layout_width="40dp"
-                    android:layout_height="35dp" />
+                    android:layout_width="45dp"
+                    android:layout_height="30dp" />
 
                 <ImageButton
                     android:id="@+id/btn_bookmark"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
+                    android:layout_width="45dp"
+                    android:layout_height="30dp"
                     android:layout_marginLeft="@dimen/pad_10dp"
                     android:background="@drawable/btn_bookmark"
                     android:scaleType="fitXY" />
-
             </LinearLayout>
 
             <View
@@ -191,21 +190,21 @@
                 android:id="@+id/description"
                 android:layout_width="match_parent"
                 android:layout_height="154dp"
+                android:layout_weight="22.20"
                 android:fadeScrollbars="false"
                 android:maxLines="15"
                 android:padding="@dimen/pad_10dp"
                 android:scrollbars="vertical"
                 android:textColor="@color/main_gray_dk"
                 android:textSize="@dimen/txt_13sp" />
-
         </LinearLayout>
 
-        <LinearLayout
+       <!-- <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="52dp"
             android:orientation="horizontal" >
 
-            <!-- <ImageButton
+             <ImageButton
                 android:id="@+id/btn_like"
                 android:layout_width="48dp"
                 android:layout_height="52dp"
@@ -221,10 +220,10 @@
 	            android:layout_marginRight="@dimen/pad_10dp"
 	            android:background="@drawable/comment1"
 	            android:scaleType="fitXY" />
-            -->
+            
 
         </LinearLayout>
-
+-->
     </LinearLayout>
 
 </ScrollView>
